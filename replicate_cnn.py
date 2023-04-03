@@ -29,12 +29,6 @@ import pandas as pd
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
 project_root = '/home/crystal_cheung/'
-def r_squared(y_expected, y_predicted):
-    """Custom metric to compute R² from mean squared error and TSS"""
-    mse = tf.reduce_mean(tf.square(y_expected - y_predicted))
-    tss = tf.reduce_mean(tf.square(y_expected - tf.reduce_mean(y_expected)))
-    return 1 - mse / tss
-
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
@@ -439,12 +433,15 @@ plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
 
+corr_str = "{:.2f}".format(corr)
+r2_str = "{:.2f}".format(r2)
+
 #compare predicted and true age
 plt.figure(figsize=(10,8))
 plt.scatter(y_expected,y_predicted)
 plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
-plt.annotate(f'Pearson correlation coefficient: {corr:.2f}',xy=(0.1,0.9), xycoords='axes fraction')
-plt.annotate(f'R-squared: {r2:.2f}', xy=(0.1,0.8), xycoords='axes fraction')
+plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
+plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('r2')
 plt.ylabel('predicted age')
 plt.xlabel('true age')
