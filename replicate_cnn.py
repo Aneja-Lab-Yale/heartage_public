@@ -25,11 +25,11 @@ import pandas as pd
 import numpy as np
 
 
-##project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-project_root = '/home/crystal_cheung/'
+#project_root = '/home/crystal_cheung/'
 detail = 'apr3_10mae'
 def callbacks_model(model_save_path,
                     csv_log_file,
@@ -385,7 +385,7 @@ model.compile(loss=loss,
               )
 
 history = model.fit(x_augmented, y_augmented, #only 300 samples for time
-          validation_data=(x_val_augmented[0:224], y_val_augmented[0:224]),
+          validation_data=(x_val_augmented, y_val_augmented),
           batch_size=batch_size,
           epochs=epochs,
           callbacks=callbacks_model
