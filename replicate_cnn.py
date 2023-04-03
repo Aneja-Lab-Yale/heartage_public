@@ -110,7 +110,7 @@ optimizer = tf.keras.optimizers.Adam(use_ema=True)
 
 #regression
 #loss= tf.keras.losses.CategoricalCrossentropy(name='loss')
-loss = tf.keras.losses.MeanSquaredError(name='loss')
+loss = tf.keras.losses.MeanAbsoluteError(name='loss')
 # mean squared error (regression)
 # uses tf.keras... function to be the loss
 #met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
@@ -362,7 +362,12 @@ x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpo
 x1 = tf.keras.layers.Flatten(name='output')(x)
 x2 = tf.keras.layers.Dropout(0.2,name='dropoutdense')(x1)
 # fraction of the input units to drop
+x2 = tf.keras.layers.Dense(16, activation = 'relu', kernel_regularizer="l2")(x2)
+x2 = tf.keras.layers.Dropout(0.2,name='dropoutdense')(x1)
+x2 = tf.keras.layers.Dense(8, activation = 'relu', kernel_regularizer="l2")(x2)
+# fraction of the input units to drop
 output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l2")(x2)
+#output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l2")(x2)
 #positive integer, dimensionality of the output space
 
 #Model
