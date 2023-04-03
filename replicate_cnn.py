@@ -19,7 +19,9 @@ import matplotlib.pyplot as plt
 #from keras.utils.vis_utils import plot_model
 from sklearn.model_selection import train_test_split
 from volumentations import *
-# from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score
+from scipy.stats import pearsonr
+import pandas as pd
 
 
 #project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
@@ -387,9 +389,21 @@ history = model.fit(x_augmented[0:656], y_augmented[0:656], #only 300 samples fo
 
 y_predicted = model.predict(x_test, batch_size=batch_size)
 
-#np.savetxt(project_root +'results/scores.csv',evaluation)
+results = model.evaluate(x_test,y_expected)
+model_metrics = model.metrics_names
+r2 = r2_score(y_expected, y_predicted)
+model_metrics.append('r2')
+results.append(r2)
 
-#r2 = r2_score(y_expected, y_predicted)
+corr = pearsonr(y_expected, y_predicted)
+model_metrics.append('r')
+results.append(corr)
+
+dict = {'Metric': model_metrics, 'Value': results}
+df = pd.DataFrame(dict)
+df.to_csv(project_root + '/results/test_evaluation.csv',index=False)
+
+#np.savetxt(project_root +'results/scores.csv',evaluation)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
 np.savetxt(project_root + "results/age_predictions_reg_apr3_2.csv", y_predicted, delimiter=",",fmt='%i')
