@@ -307,9 +307,9 @@ for i in range(len(x_val)):
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_train_label[i])
-    y_val_augmented.append(y_train_label[i])
-    y_val_augmented.append(y_train_label[i])
+    y_val_augmented.append(y_val_label[i])
+    y_val_augmented.append(y_val_label[i])
+    y_val_augmented.append(y_val_label[i])
 
 x_val_augmented = np.asarray(x_val_augmented)
 y_val_augmented = np.asarray(y_val_augmented)
