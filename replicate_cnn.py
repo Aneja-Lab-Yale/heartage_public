@@ -76,7 +76,7 @@ def callbacks_model(model_save_path,
     return callbacks
 
 def scheduler(epoch, lr):
-  if epoch < 15:
+  if epoch < 10:
     return lr
   else:
     return lr * tf.math.exp(-0.1)
