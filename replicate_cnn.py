@@ -30,7 +30,7 @@ import numpy as np
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
 project_root = '/home/crystal_cheung/'
-detail = 'apr3_10'
+detail = 'apr3_10mae'
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
