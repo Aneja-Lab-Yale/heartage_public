@@ -61,7 +61,7 @@ def callbacks_model(model_save_path,
             monitor='val_loss', min_delta=0, patience=patience, verbose=0, mode='auto',
             baseline=None, restore_best_weights=False),
         ## Stop training when quality hasn't improved, patients = number of epochs without improvement
-        tf.keras.callbacks.LearningRateScheduler(scheduler, verbose=0),
+        #tf.keras.callbacks.LearningRateScheduler(scheduler, verbose=0),
         ## Reduce learning rate per function, schedule = function(epoch index) that defines
         #tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=patience, verbose=0, mode='auto', min_delta=0.0001, cooldown=0,
                           #min_lr=minimum_lrate),
@@ -88,13 +88,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_mar31_5.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_mar31_5.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_mar31_5.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_mar31_5.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_mar31_5.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -339,7 +339,7 @@ x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
+x = tf.keras.layers.Dropout(0.2,name='dropout1')(x)
 x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn2')(x)
