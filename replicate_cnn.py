@@ -22,6 +22,7 @@ from volumentations import *
 from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
 import pandas as pd
+import numpy as np
 
 
 #project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
@@ -84,13 +85,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_apr3_6.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_apr3_6.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3_7.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3_7.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_apr3_6.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3_7.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_apr3_6.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_apr3_6.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3_7.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3_7.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -127,12 +128,14 @@ age_labels = list(np.load(project_root + 'data/ages.npy'))
 images = list(np.load(project_root + 'data/final_images.npy'))
 patient_IDs = list(np.load(project_root + 'data/corrected_NLST.npy'))
 
-for j in range(len(images)):
-    mean = images[j].mean()
-    std = images[j].std()
+for j,patient in enumerate(images):
+    # Zero center
+    mean_intensity = np.mean(images[j])
+    zeroed = images[j] - mean_intensity
 
-    # Normalize the pixel values to have zero mean and unit variance
-    images[j] = (images[j] - mean) / std
+    # Normalize
+    std_intensity = np.std(zeroed)
+    images[j] = zeroed / std_intensity
 
 indices = np.arange(len(images))
 x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
@@ -157,9 +160,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/results/test_ID_apr3_6.npy', test_ID)
-np.save(project_root + '/results/train_ID_apr3_6.npy', train_ID)
-np.save(project_root + '/results/val_ID_apr3_6.npy', val_ID)
+np.save(project_root + '/results/test_ID_apr3_7.npy', test_ID)
+np.save(project_root + '/results/train_ID_apr3_7.npy', train_ID)
+np.save(project_root + '/results/val_ID_apr3_7.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
@@ -395,12 +398,12 @@ results.append(corr)
 
 dict = {'Metric': model_metrics, 'Value': results}
 df = pd.DataFrame(dict)
-df.to_csv(project_root + '/results/test_evaluation_apr3_6.csv',index=False)
+df.to_csv(project_root + '/results/test_evaluation_apr3_7.csv',index=False)
 
 #np.savetxt(project_root +'results/scores.csv',evaluation)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
-np.savetxt(project_root + "results/age_predictions_reg_apr3_6.csv", y_predicted, delimiter=",",fmt='%i')
+np.savetxt(project_root + "results/age_predictions_reg_apr3_7.csv", y_predicted, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
