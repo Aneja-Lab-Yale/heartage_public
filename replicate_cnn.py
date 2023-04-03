@@ -85,13 +85,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_apr3_8.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_apr3_8.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3_9mse.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3_9mse.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_apr3_8.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3_9mse.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_apr3_8.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_apr3_8.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3_9mse.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3_9mse.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -110,7 +110,7 @@ optimizer = tf.keras.optimizers.Adam(use_ema=True)
 
 #regression
 #loss= tf.keras.losses.CategoricalCrossentropy(name='loss')
-loss = tf.keras.losses.MeanAbsoluteError(name='loss')
+loss = tf.keras.losses.MeanSquaredError(name='loss')
 # mean squared error (regression)
 # uses tf.keras... function to be the loss
 #met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
@@ -160,9 +160,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/results/test_ID_apr3_8.npy', test_ID)
-np.save(project_root + '/results/train_ID_apr3_8.npy', train_ID)
-np.save(project_root + '/results/val_ID_apr3_8.npy', val_ID)
+np.save(project_root + '/results/test_ID_apr3_9mse.npy', test_ID)
+np.save(project_root + '/results/train_ID_apr3_9mse.npy', train_ID)
+np.save(project_root + '/results/val_ID_apr3_9mse.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
@@ -398,12 +398,12 @@ results.append(corr)
 
 dict = {'Metric': model_metrics, 'Value': results}
 df = pd.DataFrame(dict)
-df.to_csv(project_root + '/results/test_evaluation_apr3_8.csv',index=False)
+df.to_csv(project_root + '/results/test_evaluation_apr3_9mse.csv',index=False)
 
 #np.savetxt(project_root +'results/scores.csv',evaluation)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
-np.savetxt(project_root + "results/age_predictions_reg_apr3_8.csv", y_predicted, delimiter=",",fmt='%i')
+np.savetxt(project_root + "results/age_predictions_reg_apr3_9mse.csv", y_predicted, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
