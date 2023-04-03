@@ -85,13 +85,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_apr3_7.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_apr3_7.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3_8.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3_8.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_apr3_7.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3_8.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_apr3_7.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_apr3_7.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3_8.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3_8.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -114,7 +114,7 @@ loss = tf.keras.losses.MeanAbsoluteError(name='loss')
 # mean squared error (regression)
 # uses tf.keras... function to be the loss
 #met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
-met = [tf.keras.metrics.RootMeanSquaredError(name='rmse'),tf.keras.metrics.MeanAbsoluteError(name='mae')]
+met = [tf.keras.metrics.RootMeanSquaredError(name='rmse'),tf.keras.metrics.MeanAbsoluteError(name='mae'),tf.keras.metrics.MeanSquaredError(name='mse')]
 # met = metrics, set as matrix of accuracy, AUC and false negatives from the tf.keras functions
 # mean squared error
 
@@ -160,9 +160,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/results/test_ID_apr3_7.npy', test_ID)
-np.save(project_root + '/results/train_ID_apr3_7.npy', train_ID)
-np.save(project_root + '/results/val_ID_apr3_7.npy', val_ID)
+np.save(project_root + '/results/test_ID_apr3_8.npy', test_ID)
+np.save(project_root + '/results/train_ID_apr3_8.npy', train_ID)
+np.save(project_root + '/results/val_ID_apr3_8.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
@@ -398,12 +398,12 @@ results.append(corr)
 
 dict = {'Metric': model_metrics, 'Value': results}
 df = pd.DataFrame(dict)
-df.to_csv(project_root + '/results/test_evaluation_apr3_7.csv',index=False)
+df.to_csv(project_root + '/results/test_evaluation_apr3_8.csv',index=False)
 
 #np.savetxt(project_root +'results/scores.csv',evaluation)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
-np.savetxt(project_root + "results/age_predictions_reg_apr3_7.csv", y_predicted, delimiter=",",fmt='%i')
+np.savetxt(project_root + "results/age_predictions_reg_apr3_8.csv", y_predicted, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
@@ -436,6 +436,16 @@ plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
 
+plt.figure(figsize=(10,8))
+plt.plot(history.history['mse'], label='train')
+plt.plot(history.history['val_mse'], label='val')
+plt.title('MSE')
+plt.xlabel('Epoch')
+plt.ylabel('MSE')
+plt.legend()
+#plt.show()
+plt.savefig(fig_loss)
+
 #corr_str = round(corr[0], 2)
 #r2_str = round(r2, 2)
 
@@ -445,7 +455,7 @@ plt.scatter(y_expected,y_predicted)
 plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
 #plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
 #plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
-plt.title('r2')
+plt.title('comparison')
 plt.ylabel('predicted age')
 plt.xlabel('true age')
 plt.savefig(fig_prediction)
