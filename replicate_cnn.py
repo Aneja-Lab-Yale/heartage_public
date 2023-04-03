@@ -165,7 +165,7 @@ for id in range(len(idx2)):
 
 np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
 np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
-np.save(project_root + '/results/val_ID_apr3_' + detail + '.npy', val_ID)
+np.save(project_root + '/results/val_ID_' + detail + '.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
