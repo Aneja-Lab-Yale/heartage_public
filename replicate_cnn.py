@@ -7,25 +7,19 @@
 #Import
 import tensorflow as tf
 # importing tensorflow software lib as variable tf (for machine learning)
-import numpy as np
+# import numpy as np
 # importing numpy software lib as variable np (for math fx)
 #from Useful_Functions.Misc_Functions import listdir_nohidden
 #from Useful_Functions.Misc_Functions import listdir_dicom
 #from Keras_Miscellaneous.Keras_Callbacks import callbacks_model as cb
 #import Keras_Callbacks
 #from Keras_Callbacks import callbacks_model as cb
-from dipy.io.image import load_nifti, save_nifti
-import os
-import keras
-import math
 import matplotlib.pyplot as plt
 #from pydotplus import graphviz
 #from keras.utils.vis_utils import plot_model
-from scipy.ndimage import zoom
 from sklearn.model_selection import train_test_split
 from volumentations import *
-import random
-from sklearn.metrics import r2_score
+# from sklearn.metrics import r2_score
 
 
 project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
@@ -166,6 +160,10 @@ for id in range(len(idx3)):
     train_ID.append(patient_IDs[image_index])
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
+
+np.save(project_root + '/data/test_ID.npy', test_ID)
+np.save(project_root + '/data/train_ID.npy', train_ID)
+np.save(project_root + '/data/val_ID.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
