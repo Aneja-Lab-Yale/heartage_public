@@ -79,7 +79,7 @@ def scheduler(epoch, lr):
   if epoch < 15:
     return lr
   else:
-    return lr * tf.math.exp(-0.001)
+    return lr * tf.math.exp(-0.01)
 
 #3D CNN
 
