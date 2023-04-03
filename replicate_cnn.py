@@ -84,13 +84,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_apr3_5.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_apr3_5.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3_6.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3_6.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_apr3_5.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3_6.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_apr3_5.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_apr3_5.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3_6.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3_6.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -157,9 +157,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/results/test_ID_apr3_5.npy', test_ID)
-np.save(project_root + '/results/train_ID_apr3_5.npy', train_ID)
-np.save(project_root + '/results/val_ID_apr3_5.npy', val_ID)
+np.save(project_root + '/results/test_ID_apr3_6.npy', test_ID)
+np.save(project_root + '/results/train_ID_apr3_6.npy', train_ID)
+np.save(project_root + '/results/val_ID_apr3_6.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
@@ -265,9 +265,9 @@ for i in range(len(x_val)):
     blur = vol_blur()
     gauss = vol_noise()
     bright = vol_bright()
-    combo_1 = combo1()
-    combo_2 = combo2()
-    combo_3 = combo3()
+    #combo_1 = combo1()
+    #combo_2 = combo2()
+    #combo_3 = combo3()
 
     data = {'image':x_val[i]}
 
@@ -276,9 +276,9 @@ for i in range(len(x_val)):
     aug_blur = blur(**data)
     aug_gauss = gauss(**data)
     aug_bright = bright(**data)
-    aug_combo1 = combo_1(**data)
-    aug_combo2 = combo_2(**data)
-    aug_combo3 = combo_3(**data)
+    #aug_combo1 = combo_1(**data)
+    #aug_combo2 = combo_2(**data)
+    #aug_combo3 = combo_3(**data)
 
     image_flip = aug_flip['image']
     image_rotate = aug_rotate['image']
@@ -286,30 +286,30 @@ for i in range(len(x_val)):
     image_blur = aug_blur['image']
     image_gauss = aug_gauss['image']
     image_bright = aug_bright['image']
-    image_combo1 = aug_combo1['image']
-    image_combo1 = np.reshape(image_combo1, (final_img_length, final_img_length, final_img_slice))
-    image_combo2 = aug_combo1['image']
-    image_combo2 = np.reshape(image_combo2, (final_img_length, final_img_length, final_img_slice))
-    image_combo3 = aug_combo1['image']
-    image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
+    #image_combo1 = aug_combo1['image']
+    #image_combo1 = np.reshape(image_combo1, (final_img_length, final_img_length, final_img_slice))
+    #image_combo2 = aug_combo1['image']
+    #image_combo2 = np.reshape(image_combo2, (final_img_length, final_img_length, final_img_slice))
+    #image_combo3 = aug_combo1['image']
+    #image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
     x_val_augmented.append(image_flip)
     x_val_augmented.append(image_rotate)
     x_val_augmented.append(image_blur)
     x_val_augmented.append(image_gauss)
     x_val_augmented.append(image_bright)
-    x_val_augmented.append(image_combo1)
-    x_val_augmented.append(image_combo2)
-    x_val_augmented.append(image_combo3)
+    #x_val_augmented.append(image_combo1)
+    #x_val_augmented.append(image_combo2)
+    #x_val_augmented.append(image_combo3)
 
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
 
 x_val_augmented = np.asarray(x_val_augmented)
 y_val_augmented = np.asarray(y_val_augmented)
@@ -395,12 +395,12 @@ results.append(corr)
 
 dict = {'Metric': model_metrics, 'Value': results}
 df = pd.DataFrame(dict)
-df.to_csv(project_root + '/results/test_evaluation_apr3_5.csv',index=False)
+df.to_csv(project_root + '/results/test_evaluation_apr3_6.csv',index=False)
 
 #np.savetxt(project_root +'results/scores.csv',evaluation)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
-np.savetxt(project_root + "results/age_predictions_reg_apr3_5.csv", y_predicted, delimiter=",",fmt='%i')
+np.savetxt(project_root + "results/age_predictions_reg_apr3_6.csv", y_predicted, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
