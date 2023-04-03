@@ -161,9 +161,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/data/test_ID_apr3_2.npy', test_ID)
-np.save(project_root + '/data/train_ID_apr3_2.npy', train_ID)
-np.save(project_root + '/data/val_ID_apr3_2.npy', val_ID)
+np.save(project_root + '/results/test_ID_apr3_2.npy', test_ID)
+np.save(project_root + '/results/train_ID_apr3_2.npy', train_ID)
+np.save(project_root + '/results/val_ID_apr3_2.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
