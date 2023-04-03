@@ -111,7 +111,7 @@ optimizer = tf.keras.optimizers.Adam(use_ema=True)
 
 #regression
 #loss= tf.keras.losses.CategoricalCrossentropy(name='loss')
-loss = tf.keras.losses.MeanSquaredError(name='loss')
+loss = tf.keras.losses.MeanAbsoluteError(name='loss')
 # mean squared error (regression)
 # uses tf.keras... function to be the loss
 #met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
