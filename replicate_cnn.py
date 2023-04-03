@@ -173,13 +173,28 @@ y_val_augmented = y_val_label
 def vol_flip():
     return Compose([Flip(p=1)],p=1)
 def vol_rotate():
-    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=1)])
+    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=1)],p=1)
 def vol_blur():
     return Compose([GlassBlur(sigma=0.2,max_delta=2,p=1)],p=1)
 def vol_noise():
     return Compose([GaussianNoise(p=1)],p=1)
 def vol_bright():
     return Compose([RandomBrightnessContrast(p=1)],p=1)
+def combo1():
+    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=0.75),
+                    GaussianNoise(p=0.25),
+                    GlassBlur(sigma=0.2,max_delta=2,p=0.25),
+                    Flip(p=0.2)],p=1)
+def combo2():
+    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=0.75),
+                    GaussianNoise(p=0.25),
+                    GlassBlur(sigma=0.2,max_delta=2,p=0.25),
+                    Flip(p=0.2)],p=1)
+def combo3():
+    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=0.75),
+                    GaussianNoise(p=0.25),
+                    GlassBlur(sigma=0.2,max_delta=2,p=0.25),
+                    Flip(p=0.2)],p=1)
 
 #aug = vol_gamma()
 #img = x_train[0]
@@ -194,6 +209,9 @@ for i in range(len(x_train)):
     blur = vol_blur()
     gauss = vol_noise()
     bright = vol_bright()
+    combo_1 = combo1()
+    combo_2 = combo2()
+    combo_3 = combo3()
 
     data = {'image':x_train[i]}
 
@@ -202,6 +220,9 @@ for i in range(len(x_train)):
     aug_blur = blur(**data)
     aug_gauss = gauss(**data)
     aug_bright = bright(**data)
+    aug_combo1 = combo_1(**data)
+    aug_combo2 = combo_2(**data)
+    aug_combo3 = combo_3(**data)
 
     image_flip = aug_flip['image']
     image_rotate = aug_rotate['image']
@@ -209,13 +230,25 @@ for i in range(len(x_train)):
     image_blur = aug_blur['image']
     image_gauss = aug_gauss['image']
     image_bright = aug_bright['image']
+    image_combo1 = aug_combo1['image']
+    image_combo1 = np.reshape(image_combo1,(final_img_length,final_img_length,final_img_slice))
+    image_combo2 = aug_combo1['image']
+    image_combo2 = np.reshape(image_combo2, (final_img_length, final_img_length, final_img_slice))
+    image_combo3 = aug_combo1['image']
+    image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
     x_augmented.append(image_flip)
     x_augmented.append(image_rotate)
     x_augmented.append(image_blur)
     x_augmented.append(image_gauss)
     x_augmented.append(image_bright)
+    x_augmented.append(image_combo1)
+    x_augmented.append(image_combo2)
+    x_augmented.append(image_combo3)
 
+    y_augmented.append(y_train_label[i])
+    y_augmented.append(y_train_label[i])
+    y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
@@ -236,6 +269,9 @@ for i in range(len(x_val)):
     blur = vol_blur()
     gauss = vol_noise()
     bright = vol_bright()
+    combo_1 = combo1()
+    combo_2 = combo2()
+    combo_3 = combo3()
 
     data = {'image':x_val[i]}
 
@@ -244,6 +280,9 @@ for i in range(len(x_val)):
     aug_blur = blur(**data)
     aug_gauss = gauss(**data)
     aug_bright = bright(**data)
+    aug_combo1 = combo_1(**data)
+    aug_combo2 = combo_2(**data)
+    aug_combo3 = combo_3(**data)
 
     image_flip = aug_flip['image']
     image_rotate = aug_rotate['image']
@@ -251,18 +290,30 @@ for i in range(len(x_val)):
     image_blur = aug_blur['image']
     image_gauss = aug_gauss['image']
     image_bright = aug_bright['image']
+    image_combo1 = aug_combo1['image']
+    image_combo1 = np.reshape(image_combo1, (final_img_length, final_img_length, final_img_slice))
+    image_combo2 = aug_combo1['image']
+    image_combo2 = np.reshape(image_combo2, (final_img_length, final_img_length, final_img_slice))
+    image_combo3 = aug_combo1['image']
+    image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
     x_val_augmented.append(image_flip)
     x_val_augmented.append(image_rotate)
     x_val_augmented.append(image_blur)
     x_val_augmented.append(image_gauss)
     x_val_augmented.append(image_bright)
+    x_augmented.append(image_combo1)
+    x_augmented.append(image_combo2)
+    x_augmented.append(image_combo3)
 
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
     y_val_augmented.append(y_val_label[i])
+    y_augmented.append(y_train_label[i])
+    y_augmented.append(y_train_label[i])
+    y_augmented.append(y_train_label[i])
 
 x_val_augmented = np.asarray(x_val_augmented)
 y_val_augmented = np.asarray(y_val_augmented)
