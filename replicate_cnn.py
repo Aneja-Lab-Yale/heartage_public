@@ -79,7 +79,7 @@ def scheduler(epoch, lr):
   if epoch < 15:
     return lr
   else:
-    return lr * tf.math.exp(-0.01)
+    return lr * tf.math.exp(-0.001)
 
 #3D CNN
 
@@ -88,13 +88,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_apr3.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_apr3.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3_2.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3_2.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_apr3.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3_2.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_apr3.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_apr3.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3_2.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3_2.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -161,9 +161,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/data/test_ID.npy', test_ID)
-np.save(project_root + '/data/train_ID.npy', train_ID)
-np.save(project_root + '/data/val_ID.npy', val_ID)
+np.save(project_root + '/data/test_ID_apr3_2.npy', test_ID)
+np.save(project_root + '/data/train_ID_apr3_2.npy', train_ID)
+np.save(project_root + '/data/val_ID_apr3_2.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
@@ -392,7 +392,7 @@ y_predicted = model.predict(x_test, batch_size=batch_size)
 #r2 = r2_score(y_expected, y_predicted)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
-np.savetxt(project_root + "results/age_predictions_reg.csv", y_predicted, delimiter=",",fmt='%i')
+np.savetxt(project_root + "results/age_predictions_reg_apr3_2.csv", y_predicted, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
@@ -418,9 +418,9 @@ np.savetxt(project_root + "results/age_predictions_reg.csv", y_predicted, delimi
 plt.figure(figsize=(10,8))
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='val')
-plt.title('MSE Loss')
+plt.title('MAE Loss')
 plt.xlabel('Epoch')
-plt.ylabel('MSE Loss')
+plt.ylabel('MAE Loss')
 plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
