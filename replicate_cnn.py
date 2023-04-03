@@ -88,6 +88,7 @@ def scheduler(epoch, lr):
 #Folders
 fig_accuracy = project_root + 'results/accuracy_graph_' + detail +'.png'  # change to local folder
 fig_loss = project_root + 'results/loss_graph_' + detail +'.png'  # change to local folder
+fig_mae = project_root + 'results/mae_graph_' + detail +'.png'
 fig_mse = project_root + 'results/mse_graph_' + detail +'.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
 fig_prediction = project_root + 'results/prediction_graph_' + detail +'.png'
@@ -439,9 +440,21 @@ plt.plot(history.history['val_loss'], label='val')
 plt.title('MAE Loss'+ detail)
 plt.xlabel('Epoch')
 plt.ylabel('MAE Loss')
+plt.ylim([0, 50])
 plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
+
+plt.figure(figsize=(10,8))
+plt.plot(history.history['mae'], label='train')
+plt.plot(history.history['val_mae'], label='val')
+plt.title('MAE'+ detail)
+plt.xlabel('Epoch')
+plt.ylabel('MAE')
+plt.ylim([0, 50])
+plt.legend()
+#plt.show()
+plt.savefig(fig_mae)
 
 plt.figure(figsize=(10,8))
 plt.plot(history.history['mse'], label='train')
@@ -449,6 +462,7 @@ plt.plot(history.history['val_mse'], label='val')
 plt.title('MSE'+ detail)
 plt.xlabel('Epoch')
 plt.ylabel('MSE')
+plt.ylim([0, 50])
 plt.legend()
 #plt.show()
 plt.savefig(fig_mse)
