@@ -22,11 +22,11 @@ from volumentations import *
 # from sklearn.metrics import r2_score
 
 
-project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+#project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-#project_root = '/home/crystal_cheung/'
+project_root = '/home/crystal_cheung/'
 def r_squared(y_expected, y_predicted):
     """Custom metric to compute R² from mean squared error and TSS"""
     mse = tf.reduce_mean(tf.square(y_expected - y_predicted))
