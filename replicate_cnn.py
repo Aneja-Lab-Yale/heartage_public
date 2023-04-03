@@ -96,9 +96,9 @@ csv_log_file = project_root + 'results/model_log_apr3_4.csv' # change to local f
 batch_size = 2
 # start small on batch (2-3)
 # size of batch is 10 samples before updating parameters
-epochs = 50
+epochs = 70
 # number of times training set is run for algorithm to learn
-patience = 25
+patience = 15
 # how many epochs that it doesn't improve and then stops
 min_lr = .0001
 # minimum learning rate
