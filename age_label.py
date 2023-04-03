@@ -97,3 +97,33 @@ np.save(project_root + 'data/age_class.npy', age_class)
 #print(new_ID_list[71])
 #print(new_age[71])
 
+apr5_test = np.load("C:/Users/Crystal/Downloads/test_ID_apr3_5.npy")
+apr5_val = np.load("C:/Users/Crystal/Downloads/val_ID_apr3_5.npy")
+apr5_train = np.load("C:/Users/Crystal/Downloads/train_ID_apr3_5.npy")
+test_age = []
+train_age = []
+val_age = []
+for j in range(len(apr5_test)): # for each patient ID in new patient ID list
+    for k in range(len(corrected_NLST)): # for each patient in CT data
+        if apr5_test[j] == corrected_NLST[k]: # if the NLST_xxxxxx matches between the two
+
+            test_age.append(new_age[k]) #takes the corresponding CT data patient index to get age and adds to a list of new ages that matches CAC excel
+            break # skips to outer for loop once found
+
+for j in range(len(apr5_val)): # for each patient ID in new patient ID list
+    for k in range(len(corrected_NLST)): # for each patient in CT data
+        if apr5_val[j] == corrected_NLST[k]: # if the NLST_xxxxxx matches between the two
+
+            val_age.append(new_age[k]) #takes the corresponding CT data patient index to get age and adds to a list of new ages that matches CAC excel
+            break # skips to outer for loop once found
+
+for j in range(len(apr5_train)): # for each patient ID in new patient ID list
+    for k in range(len(corrected_NLST)): # for each patient in CT data
+        if apr5_train[j] == corrected_NLST[k]: # if the NLST_xxxxxx matches between the two
+
+            train_age.append(new_age[k]) #takes the corresponding CT data patient index to get age and adds to a list of new ages that matches CAC excel
+            break # skips to outer for loop once found
+
+np.savetxt(project_root + "data/test_age.csv", test_age, delimiter=",",fmt='%i')
+np.savetxt(project_root + "data/train_age.csv", train_age, delimiter=",",fmt='%i')
+np.savetxt(project_root + "data/val_age.csv", val_age, delimiter=",",fmt='%i')
