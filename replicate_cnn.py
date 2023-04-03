@@ -113,7 +113,7 @@ optimizer = tf.keras.optimizers.Adam()
 
 #regression
 #loss= tf.keras.losses.CategoricalCrossentropy(name='loss')
-loss = tf.keras.losses.MeanAbsoluteError(name='loss')
+loss = tf.keras.losses.MeanSquaredError(name='loss')
 # mean squared error (regression)
 # uses tf.keras... function to be the loss
 #met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
@@ -418,9 +418,9 @@ np.savetxt(project_root + "results/age_predictions_reg.csv", y_predicted, delimi
 plt.figure(figsize=(10,8))
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='val')
-plt.title('MAE Loss')
+plt.title('MSE Loss')
 plt.xlabel('Epoch')
-plt.ylabel('MAE Loss')
+plt.ylabel('MSE Loss')
 plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
