@@ -22,11 +22,11 @@ from volumentations import *
 # from sklearn.metrics import r2_score
 
 
-#project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-project_root = '/home/crystal_cheung/'
+#project_root = '/home/crystal_cheung/'
 def r_squared(y_expected, y_predicted):
     """Custom metric to compute R² from mean squared error and TSS"""
     mse = tf.reduce_mean(tf.square(y_expected - y_predicted))
@@ -61,7 +61,7 @@ def callbacks_model(model_save_path,
             monitor='val_loss', min_delta=0, patience=patience, verbose=0, mode='auto',
             baseline=None, restore_best_weights=False),
         ## Stop training when quality hasn't improved, patients = number of epochs without improvement
-        #tf.keras.callbacks.LearningRateScheduler(scheduler, verbose=0),
+        tf.keras.callbacks.LearningRateScheduler(scheduler, verbose=0),
         ## Reduce learning rate per function, schedule = function(epoch index) that defines
         #tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=patience, verbose=0, mode='auto', min_delta=0.0001, cooldown=0,
                           #min_lr=minimum_lrate),
@@ -339,7 +339,7 @@ x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-x = tf.keras.layers.Dropout(0.2,name='dropout1')(x)
+x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
 x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn2')(x)
@@ -373,8 +373,8 @@ model.compile(loss=loss,
               metrics = met
               )
 
-history = model.fit(x_augmented[0:72], y_augmented[0:72], #only 300 samples for time
-          validation_data=(x_val_augmented[0:24], y_val_augmented[0:24]),
+history = model.fit(x_augmented[0:656], y_augmented[0:656], #only 300 samples for time
+          validation_data=(x_val_augmented[0:224], y_val_augmented[0:224]),
           batch_size=batch_size,
           epochs=epochs,
           callbacks=callbacks_model
