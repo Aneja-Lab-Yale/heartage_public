@@ -389,7 +389,7 @@ r2 = r2_score(y_expected, y_predicted)
 model_metrics.append('r2')
 results.append(r2)
 
-corr, _ = pearsonr(y_expected, y_predicted)
+corr = pearsonr(y_expected, y_predicted)
 model_metrics.append('r')
 results.append(corr)
 
@@ -433,7 +433,7 @@ plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
 
-corr_str = round(corr, 2)
+corr_str = round(corr[0], 2)
 r2_str = round(r2, 2)
 
 #compare predicted and true age
