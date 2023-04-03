@@ -84,13 +84,13 @@ def scheduler(epoch, lr):
 # registered data: 121 x 145 x 121
 
 #Folders
-fig_accuracy = project_root + 'results/accuracy_graph_apr3_3.png'  # change to local folder
-fig_loss = project_root + 'results/loss_graph_apr3_3.png'  # change to local folder
+fig_accuracy = project_root + 'results/accuracy_graph_apr3_4.png'  # change to local folder
+fig_loss = project_root + 'results/loss_graph_apr3_4.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
-fig_prediction = project_root + 'results/prediction_graph_apr3_3.png'
+fig_prediction = project_root + 'results/prediction_graph_apr3_4.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
-model_save_path = project_root + 'results/saved-model_apr3_3.hdf5'  # change to local folder
-csv_log_file = project_root + 'results/model_log_apr3_3.csv' # change to local folder
+model_save_path = project_root + 'results/saved-model_apr3_4.hdf5'  # change to local folder
+csv_log_file = project_root + 'results/model_log_apr3_4.csv' # change to local folder
 
 #Hyperparameters
 batch_size = 2
@@ -157,9 +157,9 @@ for id in range(len(idx3)):
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/results/test_ID_apr3_3.npy', test_ID)
-np.save(project_root + '/results/train_ID_apr3_3.npy', train_ID)
-np.save(project_root + '/results/val_ID_apr3_3.npy', val_ID)
+np.save(project_root + '/results/test_ID_apr3_4.npy', test_ID)
+np.save(project_root + '/results/train_ID_apr3_4.npy', train_ID)
+np.save(project_root + '/results/val_ID_apr3_4.npy', val_ID)
 
 #Data Augmentation
 x_augmented = x_train
@@ -331,15 +331,15 @@ y_val_augmented = np.asarray(y_val_augmented)
 
 # CNN Block 1
 input = tf.keras.Input(shape = input_shape, batch_size = batch_size)
-x = tf.keras.layers.Conv3D(8, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1")(input)
+x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1")(input)
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-x = tf.keras.layers.Dropout(0.4,name='dropout1')(x)
-x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
+#x = tf.keras.layers.Dropout(0.4,name='dropout1')(x)
+#x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
-x = tf.keras.layers.BatchNormalization(name='bn2')(x)
-x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
+#x = tf.keras.layers.BatchNormalization(name='bn2')(x)
+#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
 #x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
 # find filter integer
 #x = tf.keras.layers.BatchNormalization(name='bn3')(x)
@@ -395,12 +395,12 @@ results.append(corr)
 
 dict = {'Metric': model_metrics, 'Value': results}
 df = pd.DataFrame(dict)
-df.to_csv(project_root + '/results/test_evaluation_apr3_3.csv',index=False)
+df.to_csv(project_root + '/results/test_evaluation_apr3_4.csv',index=False)
 
 #np.savetxt(project_root +'results/scores.csv',evaluation)
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
-np.savetxt(project_root + "results/age_predictions_reg_apr3_3.csv", y_predicted, delimiter=",",fmt='%i')
+np.savetxt(project_root + "results/age_predictions_reg_apr3_4.csv", y_predicted, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
