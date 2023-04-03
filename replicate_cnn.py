@@ -102,7 +102,7 @@ batch_size = 2
 # size of batch is 10 samples before updating parameters
 epochs = 50
 # number of times training set is run for algorithm to learn
-patience = 5
+patience = 25
 # how many epochs that it doesn't improve and then stops
 min_lr = .0001
 # minimum learning rate
