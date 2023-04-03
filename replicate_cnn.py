@@ -433,8 +433,8 @@ plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
 
-corr_str = "{:.2f}".format(corr)
-r2_str = "{:.2f}".format(r2)
+corr_str = round(corr, 2)
+r2_str = round(r2, 2)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
