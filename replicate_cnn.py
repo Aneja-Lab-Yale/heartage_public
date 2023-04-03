@@ -88,6 +88,7 @@ def scheduler(epoch, lr):
 #Folders
 fig_accuracy = project_root + 'results/accuracy_graph_' + detail +'.png'  # change to local folder
 fig_loss = project_root + 'results/loss_graph_' + detail +'.png'  # change to local folder
+fig_mse = project_root + 'results/mse_graph_' + detail +'.png'  # change to local folder
 #fig_loss_accuracy = project_root + 'results/loss_acc_graph_mar31.png'  # change to local folder
 fig_prediction = project_root + 'results/prediction_graph_' + detail +'.png'
 #fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
@@ -450,7 +451,7 @@ plt.xlabel('Epoch')
 plt.ylabel('MSE')
 plt.legend()
 #plt.show()
-plt.savefig(fig_loss)
+plt.savefig(fig_mse)
 
 #corr_str = round(corr[0], 2)
 #r2_str = round(r2, 2)
