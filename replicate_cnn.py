@@ -25,12 +25,12 @@ import pandas as pd
 import numpy as np
 
 
-#project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-project_root = '/home/crystal_cheung/'
-detail = 'apr3_10mae'
+#project_root = '/home/crystal_cheung/'
+detail = 'apr3_10mae_noaug'
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
@@ -204,34 +204,34 @@ def combo3():
 #aug_data = aug(**data)
 #img = aug_data['image']
 
-for i in range(len(x_train)):
+#for i in range(len(x_train)):
 
-    flip = vol_flip()
-    rotate = vol_rotate()
-    blur = vol_blur()
-    gauss = vol_noise()
-    bright = vol_bright()
+    #flip = vol_flip()
+    #rotate = vol_rotate()
+    #blur = vol_blur()
+    #gauss = vol_noise()
+    #bright = vol_bright()
     #combo_1 = combo1()
     #combo_2 = combo2()
     #combo_3 = combo3()
 
-    data = {'image':x_train[i]}
+    #data = {'image':x_train[i]}
 
-    aug_flip = flip(**data)
-    aug_rotate = rotate(**data)
-    aug_blur = blur(**data)
-    aug_gauss = gauss(**data)
-    aug_bright = bright(**data)
+    #aug_flip = flip(**data)
+    #aug_rotate = rotate(**data)
+    #aug_blur = blur(**data)
+    #aug_gauss = gauss(**data)
+    #aug_bright = bright(**data)
     #aug_combo1 = combo_1(**data)
     #aug_combo2 = combo_2(**data)
     #aug_combo3 = combo_3(**data)
 
-    image_flip = aug_flip['image']
-    image_rotate = aug_rotate['image']
-    image_rotate = np.reshape(image_rotate,(final_img_length,final_img_length,final_img_slice))
-    image_blur = aug_blur['image']
-    image_gauss = aug_gauss['image']
-    image_bright = aug_bright['image']
+    #image_flip = aug_flip['image']
+    #image_rotate = aug_rotate['image']
+    #image_rotate = np.reshape(image_rotate,(final_img_length,final_img_length,final_img_slice))
+    #image_blur = aug_blur['image']
+    #image_gauss = aug_gauss['image']
+    #image_bright = aug_bright['image']
     #image_combo1 = aug_combo1['image']
     #image_combo1 = np.reshape(image_combo1,(final_img_length,final_img_length,final_img_slice))
     #image_combo2 = aug_combo1['image']
@@ -239,20 +239,20 @@ for i in range(len(x_train)):
     #image_combo3 = aug_combo1['image']
     #image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
-    x_augmented.append(image_flip)
-    x_augmented.append(image_rotate)
-    x_augmented.append(image_blur)
-    x_augmented.append(image_gauss)
-    x_augmented.append(image_bright)
+    #x_augmented.append(image_flip)
+    #x_augmented.append(image_rotate)
+    #x_augmented.append(image_blur)
+    #x_augmented.append(image_gauss)
+    #x_augmented.append(image_bright)
     #x_augmented.append(image_combo1)
     #x_augmented.append(image_combo2)
     #x_augmented.append(image_combo3)
 
-    y_augmented.append(y_train_label[i])
-    y_augmented.append(y_train_label[i])
-    y_augmented.append(y_train_label[i])
-    y_augmented.append(y_train_label[i])
-    y_augmented.append(y_train_label[i])
+    #y_augmented.append(y_train_label[i])
+    #y_augmented.append(y_train_label[i])
+    #y_augmented.append(y_train_label[i])
+    #y_augmented.append(y_train_label[i])
+    #y_augmented.append(y_train_label[i])
     #y_augmented.append(y_train_label[i])
     #y_augmented.append(y_train_label[i])
     #y_augmented.append(y_train_label[i])
@@ -261,37 +261,34 @@ x_augmented = np.asarray(x_augmented)
 y_augmented = np.asarray(y_augmented)
 #y_train = tf.keras.utils.to_categorical(y_augmented,num_classes=num_class)
 
-x_val_augmented = x_val
-y_val_augmented = y_val_label
+#for i in range(len(x_val)):
 
-for i in range(len(x_val)):
-
-    flip = vol_flip()
-    rotate = vol_rotate()
-    blur = vol_blur()
-    gauss = vol_noise()
-    bright = vol_bright()
+    #flip = vol_flip()
+    #rotate = vol_rotate()
+    #blur = vol_blur()
+    #gauss = vol_noise()
+    #bright = vol_bright()
     #combo_1 = combo1()
     #combo_2 = combo2()
     #combo_3 = combo3()
 
-    data = {'image':x_val[i]}
+    #data = {'image':x_val[i]}
 
-    aug_flip = flip(**data)
-    aug_rotate = rotate(**data)
-    aug_blur = blur(**data)
-    aug_gauss = gauss(**data)
-    aug_bright = bright(**data)
+    #aug_flip = flip(**data)
+    #aug_rotate = rotate(**data)
+    #aug_blur = blur(**data)
+    #aug_gauss = gauss(**data)
+    #aug_bright = bright(**data)
     #aug_combo1 = combo_1(**data)
     #aug_combo2 = combo_2(**data)
     #aug_combo3 = combo_3(**data)
 
-    image_flip = aug_flip['image']
-    image_rotate = aug_rotate['image']
-    image_rotate = np.reshape(image_rotate,(final_img_length,final_img_length,final_img_slice))
-    image_blur = aug_blur['image']
-    image_gauss = aug_gauss['image']
-    image_bright = aug_bright['image']
+    #image_flip = aug_flip['image']
+    #image_rotate = aug_rotate['image']
+    #image_rotate = np.reshape(image_rotate,(final_img_length,final_img_length,final_img_slice))
+    #image_blur = aug_blur['image']
+    #image_gauss = aug_gauss['image']
+    #image_bright = aug_bright['image']
     #image_combo1 = aug_combo1['image']
     #image_combo1 = np.reshape(image_combo1, (final_img_length, final_img_length, final_img_slice))
     #image_combo2 = aug_combo1['image']
@@ -299,20 +296,20 @@ for i in range(len(x_val)):
     #image_combo3 = aug_combo1['image']
     #image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
-    x_val_augmented.append(image_flip)
-    x_val_augmented.append(image_rotate)
-    x_val_augmented.append(image_blur)
-    x_val_augmented.append(image_gauss)
-    x_val_augmented.append(image_bright)
+    #x_val_augmented.append(image_flip)
+    #x_val_augmented.append(image_rotate)
+    #x_val_augmented.append(image_blur)
+    #x_val_augmented.append(image_gauss)
+    #x_val_augmented.append(image_bright)
     #x_val_augmented.append(image_combo1)
     #x_val_augmented.append(image_combo2)
     #x_val_augmented.append(image_combo3)
 
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
+    #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])
@@ -384,8 +381,8 @@ model.compile(loss=loss,
               metrics = met
               )
 
-history = model.fit(x_augmented, y_augmented, #only 300 samples for time
-          validation_data=(x_val_augmented, y_val_augmented),
+history = model.fit(x_augmented[0:72], y_augmented[0:72], #only 300 samples for time
+          validation_data=(x_val_augmented[0:24], y_val_augmented[0:24]),
           batch_size=batch_size,
           epochs=epochs,
           callbacks=callbacks_model
