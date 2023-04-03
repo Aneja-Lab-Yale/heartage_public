@@ -389,7 +389,7 @@ r2 = r2_score(y_expected, y_predicted)
 model_metrics.append('r2')
 results.append(r2)
 
-corr = pearsonr(y_expected, y_predicted)
+corr, _ = pearsonr(y_expected, y_predicted)
 model_metrics.append('r')
 results.append(corr)
 
@@ -433,15 +433,15 @@ plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
 
-corr_str = round(corr[0], 2)
-r2_str = round(r2, 2)
+#corr_str = round(corr[0], 2)
+#r2_str = round(r2, 2)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
 plt.scatter(y_expected,y_predicted)
 plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
-plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
-plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
+#plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
+#plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('r2')
 plt.ylabel('predicted age')
 plt.xlabel('true age')
