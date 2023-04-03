@@ -25,11 +25,11 @@ import pandas as pd
 import numpy as np
 
 
-project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+#project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-#project_root = '/home/crystal_cheung/'
+project_root = '/home/crystal_cheung/'
 detail = 'apr3_10mae_noaug'
 def callbacks_model(model_save_path,
                     csv_log_file,
