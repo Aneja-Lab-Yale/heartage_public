@@ -73,9 +73,19 @@ def callbacks_model(model_save_path,
         ]
     return callbacks
 
-def scheduler(epoch, lr):
-  if epoch % 10 == 0:
-    return float(lr * 0.8)
+def scheduler(epoch):
+
+    initial_lr = 0.001
+    # Set the number of epochs after which the learning rate should drop
+    drop_every = 10
+
+    # Set the factor by which the learning rate should drop
+    drop_factor = 0.8
+
+    # Calculate the new learning rate based on the current epoch
+    lr = initial_lr * drop_factor ** (epoch // drop_every)
+
+    return lr
 
 #3D CNN
 
