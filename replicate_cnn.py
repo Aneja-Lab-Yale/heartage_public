@@ -77,7 +77,7 @@ def scheduler(epoch):
 
     initial_lr = 0.001
     # Set the number of epochs after which the learning rate should drop
-    drop_every = 10
+    drop_every = 5
 
     # Set the factor by which the learning rate should drop
     drop_factor = 0.8
