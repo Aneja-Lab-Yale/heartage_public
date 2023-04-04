@@ -77,7 +77,7 @@ def scheduler(epoch, lr):
   if epoch < 15:
     return lr
   else:
-    return lr * tf.math.exp(-0.1)
+    return lr * 0.8
 
 #3D CNN
 
@@ -354,11 +354,11 @@ x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-#x = tf.keras.layers.Dropout(0.4,name='dropout1')(x)
-#x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
+x = tf.keras.layers.Dropout(0.4,name='dropout1')(x)
+x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
-#x = tf.keras.layers.BatchNormalization(name='bn2')(x)
-#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
+x = tf.keras.layers.BatchNormalization(name='bn2')(x)
+x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
 #x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
 # find filter integer
 #x = tf.keras.layers.BatchNormalization(name='bn3')(x)
