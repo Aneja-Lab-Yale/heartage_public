@@ -74,9 +74,7 @@ def callbacks_model(model_save_path,
     return callbacks
 
 def scheduler(epoch, lr):
-  if epoch < 15:
-    return lr
-  else:
+  if epoch % 10 == 0:
     return lr * 0.8
 
 #3D CNN
