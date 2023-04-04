@@ -30,7 +30,7 @@ import numpy as np
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
 project_root = '/home/crystal_cheung/'
-detail = 'apr3_10mae_waug'
+detail = 'apr4_mae_waug'
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
@@ -77,7 +77,7 @@ def scheduler(epoch, lr):
   if epoch < 15:
     return lr
   else:
-    return lr * tf.math.exp(-0.01)
+    return lr * tf.math.exp(-0.1)
 
 #3D CNN
 
@@ -154,24 +154,37 @@ y_expected = y_test_label
 test_ID = []
 train_ID = []
 val_ID = []
+train_age_new = []
 for id in range(len(idx4)):
     image_index = idx1[idx4[id]]
     test_ID.append(patient_IDs[image_index])
 for id in range(len(idx3)):
     image_index = idx1[idx3[id]]
     train_ID.append(patient_IDs[image_index])
+    train_age_new.append(y_train_label[id])
 for id in range(len(idx2)):
     val_ID.append(patient_IDs[idx2[id]])
 
-np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
+valtest_ID = val_ID
+valtest_age = y_val_label
+valtest = x_val
+for patient in range(len(idx4)):
+    valtest_ID.append(test_ID[patient])
+    valtest_age.append(y_test_label[patient])
+    valtest.append(x_test[patient])
+
+#np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
 np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
-np.save(project_root + '/results/val_ID_' + detail + '.npy', val_ID)
+#np.save(project_root + '/results/val_ID_' + detail + '.npy', val_ID)
+np.save(project_root + '/results/valtest_ID_' + detail + '.npy', valtest_ID)
+np.savetxt(project_root + "/results/valtest_age.csv", valtest_age, delimiter=",",fmt='%i')
+np.savetxt(project_root + "/results/train_age_new.csv", train_age_new, delimiter=",",fmt='%i')
 
 #Data Augmentation
 x_augmented = x_train
 y_augmented = y_train_label
-x_val_augmented = x_val
-y_val_augmented = y_val_label
+x_val_augmented = valtest
+y_val_augmented = valtest_age
 def vol_flip():
     return Compose([Flip(p=1)],p=1)
 def vol_rotate():
@@ -381,23 +394,23 @@ model.compile(loss=loss,
               metrics = met
               )
 
-history = model.fit(x_augmented[0:72], y_augmented[0:72], #only 300 samples for time
-          validation_data=(x_val_augmented[0:24], y_val_augmented[0:24]),
+history = model.fit(x_augmented, y_augmented, #only 300 samples for time
+          validation_data=(x_val_augmented, y_val_augmented),
           batch_size=batch_size,
           epochs=epochs,
           callbacks=callbacks_model
           )
 
 
-y_predicted = model.predict(x_test, batch_size=batch_size)
+y_predicted = model.predict(valtest, batch_size=batch_size)
 
-results = model.evaluate(x_test,y_expected)
+results = model.evaluate(valtest,valtest_age)
 model_metrics = model.metrics_names
-r2 = r2_score(y_expected, y_predicted)
+r2 = r2_score(valtest_age, y_predicted)
 model_metrics.append('r2')
 results.append(r2)
 
-corr, _ = pearsonr(y_expected, y_predicted)
+corr, _ = pearsonr(valtest_age, y_predicted)
 model_metrics.append('r')
 results.append(corr)
 
@@ -453,24 +466,13 @@ plt.legend()
 #plt.show()
 plt.savefig(fig_mae)
 
-plt.figure(figsize=(10,8))
-plt.plot(history.history['mse'], label='train')
-plt.plot(history.history['val_mse'], label='val')
-plt.title('MSE'+ detail)
-plt.xlabel('Epoch')
-plt.ylabel('MSE')
-plt.ylim([0, 50])
-plt.legend()
-#plt.show()
-plt.savefig(fig_mse)
-
 #corr_str = round(corr[0], 2)
 #r2_str = round(r2, 2)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
-plt.scatter(y_expected,y_predicted)
-plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
+plt.scatter(valtest_age,y_predicted)
+plt.plot([min(valtest_age), max(valtest_age)], [min(valtest_age), max(valtest_age)], 'k--', lw=4)
 #plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
 #plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('comparison'+ detail)
