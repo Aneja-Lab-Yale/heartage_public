@@ -146,10 +146,10 @@ x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(ima
 indices2 = np.arange(len(x_train_pre))
 x_train,x_test,y_train_label,y_test_label,idx3,idx4 = train_test_split(x_train_pre,y_train_label_pre,indices2,test_size = 0.25, random_state = 42)
 #x_train = np.asarray(x_train)
-x_test = np.asarray(x_test)
+#x_test = np.asarray(x_test)
 #y_train_label = np.asarray(y_train_label)
-y_test_label = np.asarray(y_test_label)
-y_expected = y_test_label
+#y_test_label = np.asarray(y_test_label)
+
 
 test_ID = []
 train_ID = []
@@ -172,6 +172,9 @@ for patient in range(len(idx4)):
     valtest_ID.append(test_ID[patient])
     valtest_age.append(y_test_label[patient])
     valtest.append(x_test[patient])
+
+y_expected = np.asarray(valtest_age)
+x_test_plug = np.asarray(valtest)
 
 #np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
 np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
@@ -402,15 +405,15 @@ history = model.fit(x_augmented, y_augmented, #only 300 samples for time
           )
 
 
-y_predicted = model.predict(valtest, batch_size=batch_size)
+y_predicted = model.predict(x_test_plug, batch_size=batch_size)
 
-results = model.evaluate(valtest,valtest_age)
+results = model.evaluate(x_test_plug,y_expected)
 model_metrics = model.metrics_names
-r2 = r2_score(valtest_age, y_predicted)
+r2 = r2_score(y_expected, y_predicted)
 model_metrics.append('r2')
 results.append(r2)
 
-corr, _ = pearsonr(valtest_age, y_predicted)
+corr, _ = pearsonr(y_expected, y_predicted)
 model_metrics.append('r')
 results.append(corr)
 
@@ -471,8 +474,8 @@ plt.savefig(fig_mae)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
-plt.scatter(valtest_age,y_predicted)
-plt.plot([min(valtest_age), max(valtest_age)], [min(valtest_age), max(valtest_age)], 'k--', lw=4)
+plt.scatter(y_expected,y_predicted)
+plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
 #plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
 #plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('comparison'+ detail)
