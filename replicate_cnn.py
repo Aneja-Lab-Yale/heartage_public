@@ -177,6 +177,8 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
 
 train_ID = []
 valtest_ID = []
+idx1 = list(idx1)
+idx2 = list(idx2)
 for patient in range(len(idx2)):
     valtest_ID.append(patient_IDs[idx2[patient]])
 for patient in range(len(idx1)):
