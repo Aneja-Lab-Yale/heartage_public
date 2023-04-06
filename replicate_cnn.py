@@ -364,19 +364,19 @@ y_val_augmented = np.asarray(y_val_augmented)
 
 # CNN Block 1
 input = tf.keras.Input(shape = input_shape, batch_size = batch_size)
-x = tf.keras.layers.Conv3D(8, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1")(input)
+x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1")(input)
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
-x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
+#x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
+#x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
-x = tf.keras.layers.BatchNormalization(name='bn2')(x)
-x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
-x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
+#x = tf.keras.layers.BatchNormalization(name='bn2')(x)
+#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
+#x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
 # find filter integer
-x = tf.keras.layers.BatchNormalization(name='bn3')(x)
-x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool3")(x)
+#x = tf.keras.layers.BatchNormalization(name='bn3')(x)
+x# = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool3")(x)
 
 #CNN Block 2-5
 #for j in range(1): #change to 3 blocks
