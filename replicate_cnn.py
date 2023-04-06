@@ -390,9 +390,9 @@ x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpo
 
 #CNN output
 x1 = tf.keras.layers.Flatten(name='output')(x)
-x2 = tf.keras.layers.Dropout(0.5,name='dropoutdense')(x1)
+x2 = tf.keras.layers.Dropout(0.5)(x1)
 x2 = tf.keras.layers.Dense(32, activation="linear",kernel_regularizer="l2")(x2)
-x2 = tf.keras.layers.Dropout(0.5,name='dropoutdense')(x2)
+x2 = tf.keras.layers.Dropout(0.5)(x2)
 # fraction of the input units to drop
 x2 = tf.keras.layers.Dense(64, activation="linear",kernel_regularizer="l2")(x2)
 # fraction of the input units to drop
