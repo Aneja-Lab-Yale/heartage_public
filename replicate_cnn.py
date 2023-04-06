@@ -175,22 +175,20 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
 #for id in range(len(idx2)):
     #val_ID.append(patient_IDs[idx2[id]])
 
-train_ID = []
-valtest_ID = []
-idx1 = list(idx1)
-idx2 = list(idx2)
-for patient in range(len(idx2)):
-    valtest_ID.append(patient_IDs[idx2[patient]])
-for patient in range(len(idx1)):
-    train_ID.append(patient_IDs[idx1[patient]])
+#train_ID = []
+#valtest_ID = []
+#for patient in range(len(idx2)):
+    #valtest_ID.append(patient_IDs[idx2[patient]])
+#for patient in range(len(idx1)):
+    #train_ID.append(patient_IDs[idx1[patient]])
 
 y_expected = np.asarray(y_valtest_label)
 x_test_plug = np.asarray(x_valtest)
 
 #np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
-np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
+#np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
 #np.save(project_root + '/results/val_ID_' + detail + '.npy', val_ID)
-np.save(project_root + '/results/valtest_ID_' + detail + '.npy', valtest_ID)
+#np.save(project_root + '/results/valtest_ID_' + detail + '.npy', valtest_ID)
 #np.savetxt(project_root + "/results/valtest_age.csv", valtest_age, delimiter=",",fmt='%i')
 #np.savetxt(project_root + "/results/train_age_new.csv", train_age_new, delimiter=",",fmt='%i')
 
