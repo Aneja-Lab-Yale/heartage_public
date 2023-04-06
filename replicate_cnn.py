@@ -30,7 +30,7 @@ import numpy as np
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
 project_root = '/home/crystal_cheung/'
-detail = 'apr4_mae_waug'
+detail = 'apr6_mae_waug'
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
@@ -131,13 +131,14 @@ met = [tf.keras.metrics.RootMeanSquaredError(name='rmse'),tf.keras.metrics.MeanA
 
 # Constants
 final_img_length = 60
-final_img_slice = 46
+final_img_slice = 47
 input_shape = (final_img_length,final_img_length,final_img_slice,1) # need to fill this in (x, y, z, channel)
-num_class = 4  # need to fill this in (outcomes:age ranges)
+#num_class = 4  # need to fill this in (outcomes:age ranges)
 #age_labels = list(np.load(project_root + 'data/age_class.npy'))
 age_labels = list(np.load(project_root + 'data/ages.npy'))
 images = list(np.load(project_root + 'data/final_images.npy'))
 patient_IDs = list(np.load(project_root + 'data/corrected_NLST.npy'))
+age_class = list(np.load(project_root + 'data/age_class.npy'))
 
 for j,patient in enumerate(images):
     # Zero center
@@ -149,53 +150,53 @@ for j,patient in enumerate(images):
     images[j] = zeroed / std_intensity
 
 indices = np.arange(len(images))
-x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
+x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.3, stratify =age_class, random_state = 42)
 
-indices2 = np.arange(len(x_train_pre))
-x_train,x_test,y_train_label,y_test_label,idx3,idx4 = train_test_split(x_train_pre,y_train_label_pre,indices2,test_size = 0.25, random_state = 42)
+#x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
+
+#indices2 = np.arange(len(x_train_pre))
+#x_train,x_test,y_train_label,y_test_label,idx3,idx4 = train_test_split(x_train_pre,y_train_label_pre,indices2,test_size = 0.25, random_state = 42)
 #x_train = np.asarray(x_train)
 #x_test = np.asarray(x_test)
 #y_train_label = np.asarray(y_train_label)
 #y_test_label = np.asarray(y_test_label)
 
 
-test_ID = []
+#test_ID = []
+#val_ID = []
+#train_age_new = []
+#for id in range(len(idx4)):
+    #image_index = idx1[idx4[id]]
+    #test_ID.append(patient_IDs[image_index])
+#for id in range(len(idx3)):
+    #image_index = idx1[idx3[id]]
+    #train_ID.append(patient_IDs[image_index])
+    #train_age_new.append(y_train_label[id])
+#for id in range(len(idx2)):
+    #val_ID.append(patient_IDs[idx2[id]])
+
 train_ID = []
-val_ID = []
-train_age_new = []
-for id in range(len(idx4)):
-    image_index = idx1[idx4[id]]
-    test_ID.append(patient_IDs[image_index])
-for id in range(len(idx3)):
-    image_index = idx1[idx3[id]]
-    train_ID.append(patient_IDs[image_index])
-    train_age_new.append(y_train_label[id])
-for id in range(len(idx2)):
-    val_ID.append(patient_IDs[idx2[id]])
+valtest_ID = []
+for patient in range(len(idx2)):
+    valtest_ID.append(patient_IDs[idx2[patient]])
+for patient in range(len(idx1)):
+    train_ID.append(patient_IDs[idx1[patient]])
 
-valtest_ID = val_ID
-valtest_age = y_val_label
-valtest = x_val
-for patient in range(len(idx4)):
-    valtest_ID.append(test_ID[patient])
-    valtest_age.append(y_test_label[patient])
-    valtest.append(x_test[patient])
-
-y_expected = np.asarray(valtest_age)
-x_test_plug = np.asarray(valtest)
+y_expected = np.asarray(y_valtest_label)
+x_test_plug = np.asarray(x_valtest)
 
 #np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
 np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
 #np.save(project_root + '/results/val_ID_' + detail + '.npy', val_ID)
 np.save(project_root + '/results/valtest_ID_' + detail + '.npy', valtest_ID)
-np.savetxt(project_root + "/results/valtest_age.csv", valtest_age, delimiter=",",fmt='%i')
-np.savetxt(project_root + "/results/train_age_new.csv", train_age_new, delimiter=",",fmt='%i')
+#np.savetxt(project_root + "/results/valtest_age.csv", valtest_age, delimiter=",",fmt='%i')
+#np.savetxt(project_root + "/results/train_age_new.csv", train_age_new, delimiter=",",fmt='%i')
 
 #Data Augmentation
 x_augmented = x_train
 y_augmented = y_train_label
-x_val_augmented = valtest
-y_val_augmented = valtest_age
+x_val_augmented = x_valtest
+y_val_augmented = y_valtest_label
 def vol_flip():
     return Compose([Flip(p=1)],p=1)
 def vol_rotate():
@@ -285,7 +286,7 @@ x_augmented = np.asarray(x_augmented)
 y_augmented = np.asarray(y_augmented)
 #y_train = tf.keras.utils.to_categorical(y_augmented,num_classes=num_class)
 
-for i in range(len(x_val)):
+for i in range(len(x_valtest)):
 
     flip = vol_flip()
     rotate = vol_rotate()
@@ -296,7 +297,7 @@ for i in range(len(x_val)):
     #combo_2 = combo2()
     #combo_3 = combo3()
 
-    data = {'image':x_val[i]}
+    data = {'image':x_valtest[i]}
 
     aug_flip = flip(**data)
     aug_rotate = rotate(**data)
@@ -329,11 +330,11 @@ for i in range(len(x_val)):
     #x_val_augmented.append(image_combo2)
     #x_val_augmented.append(image_combo3)
 
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
-    y_val_augmented.append(y_val_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
     #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])

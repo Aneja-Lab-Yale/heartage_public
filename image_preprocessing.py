@@ -169,7 +169,7 @@ for i,patient in enumerate(patient_IDs):
 final = [] #list of downsampled arrays
 final_shape = [] #list of downsampled array shapes
 final_img_length = 60
-final_img_slice = 46
+final_img_slice = 47
 
 # resampling images
 for i,patient in enumerate(patient_IDs):

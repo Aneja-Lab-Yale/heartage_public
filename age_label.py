@@ -83,18 +83,18 @@ age_class = []
 # 5 = 75-80
 
 for i in range(len(new_age)):
-    if new_age[i] < 60:
+    if new_age[i] <= 60:
         age_bin = 0
-    elif 60 <= new_age[i] < 65:
+    elif 60 < new_age[i] <= 65:
         age_bin = 1
-    elif 65 <= new_age[i] < 70:
+    elif 65 < new_age[i] <= 70:
         age_bin = 2
-    elif 70 <= new_age[i]:
+    elif 70 < new_age[i]:
         age_bin = 3
 
     age_class.append(age_bin)
 
-#np.savetxt(project_root + "data/age_class.csv", age_class, delimiter=",",fmt='%i')
+np.savetxt(project_root + "age_class.csv", age_class, delimiter=",",fmt='%i')
 np.save(project_root + 'data/age_class.npy', age_class)
 #print(len(new_age))
 #print(corrected_NLST[71])
