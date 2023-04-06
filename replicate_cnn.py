@@ -151,7 +151,7 @@ for j,patient in enumerate(images):
     images[j] = zeroed / std_intensity
 
 indices = np.arange(len(images))
-x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.3, stratify =age_class, random_state = 42)
+x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.4, stratify =age_class, random_state = 42)
 
 #x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
 
