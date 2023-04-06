@@ -109,7 +109,7 @@ csv_log_file = project_root + 'results/model_log_' + detail +'.csv' # change to 
 batch_size = 2
 # start small on batch (2-3)
 # size of batch is 10 samples before updating parameters
-epochs = 200
+epochs = 80
 # number of times training set is run for algorithm to learn
 patience = 15
 # how many epochs that it doesn't improve and then stops
@@ -122,7 +122,7 @@ optimizer = tf.keras.optimizers.Adam(use_ema=True)
 
 #regression
 #loss= tf.keras.losses.CategoricalCrossentropy(name='loss')
-loss = tf.keras.losses.MeanAbsoluteError(name='loss')
+loss = tf.keras.losses.MeanSquaredError(name='loss')
 # mean squared error (regression)
 # uses tf.keras... function to be the loss
 #met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
@@ -391,10 +391,10 @@ x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpo
 #CNN output
 x1 = tf.keras.layers.Flatten(name='output')(x)
 x2 = tf.keras.layers.Dropout(0.5)(x1)
-x2 = tf.keras.layers.Dense(32, activation="linear",kernel_regularizer="l2")(x2)
-x2 = tf.keras.layers.Dropout(0.5)(x2)
+#x2 = tf.keras.layers.Dense(32, activation="linear",kernel_regularizer="l2")(x2)
+#x2 = tf.keras.layers.Dropout(0.5)(x2)
 # fraction of the input units to drop
-x2 = tf.keras.layers.Dense(64, activation="linear",kernel_regularizer="l2")(x2)
+#x2 = tf.keras.layers.Dense(64, activation="linear",kernel_regularizer="l2")(x2)
 # fraction of the input units to drop
 output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l2")(x2)
 #output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l2")(x2)
@@ -464,9 +464,9 @@ np.savetxt(project_root + 'results/age_predictions_reg_' + detail +'.csv', y_pre
 plt.figure(figsize=(10,8))
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='val')
-plt.title('MAE Loss '+ detail)
+plt.title('MSE Loss '+ detail)
 plt.xlabel('Epoch')
-plt.ylabel('MAE Loss')
+plt.ylabel('MSE Loss')
 plt.ylim([0, 50])
 plt.legend()
 #plt.show()
