@@ -26,11 +26,11 @@ import numpy as np
 from sklearn.decomposition import PCA
 
 
-#project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-project_root = '/home/crystal_cheung/'
+#project_root = '/home/crystal_cheung/'
 detail = 'apr6_mae_waug_test'
 def callbacks_model(model_save_path,
                     csv_log_file,
@@ -411,7 +411,7 @@ model.compile(loss=loss,
               metrics = met
               )
 
-history = model.fit(x_augmented, y_augmented,
+history = model.fit(x_augmented[:184], y_augmented[:184],
           validation_data=(x_val_augmented, y_val_augmented),
           batch_size=batch_size,
           epochs=epochs,
