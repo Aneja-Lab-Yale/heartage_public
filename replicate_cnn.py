@@ -291,34 +291,34 @@ x_augmented = np.asarray(x_augmented)
 y_augmented = np.asarray(y_augmented)
 #y_train = tf.keras.utils.to_categorical(y_augmented,num_classes=num_class)
 
-#for i in range(len(x_valtest)):
+for i in range(len(x_valtest)):
 
-    #flip = vol_flip()
-    #rotate = vol_rotate()
-    #blur = vol_blur()
-    #gauss = vol_noise()
-    #bright = vol_bright()
+    flip = vol_flip()
+    rotate = vol_rotate()
+    blur = vol_blur()
+    gauss = vol_noise()
+    bright = vol_bright()
     #combo_1 = combo1()
     #combo_2 = combo2()
     #combo_3 = combo3()
 
-    #data = {'image':x_valtest[i]}
+    data = {'image':x_valtest[i]}
 
-    #aug_flip = flip(**data)
-    #aug_rotate = rotate(**data)
-    #aug_blur = blur(**data)
-    #aug_gauss = gauss(**data)
-    #aug_bright = bright(**data)
+    aug_flip = flip(**data)
+    aug_rotate = rotate(**data)
+    aug_blur = blur(**data)
+    aug_gauss = gauss(**data)
+    aug_bright = bright(**data)
     #aug_combo1 = combo_1(**data)
     #aug_combo2 = combo_2(**data)
     #aug_combo3 = combo_3(**data)
 
-    #image_flip = aug_flip['image']
-    #image_rotate = aug_rotate['image']
-    #image_rotate = np.reshape(image_rotate,(final_img_length,final_img_length,final_img_slice))
-    #image_blur = aug_blur['image']
-    #image_gauss = aug_gauss['image']
-    #image_bright = aug_bright['image']
+    image_flip = aug_flip['image']
+    image_rotate = aug_rotate['image']
+    image_rotate = np.reshape(image_rotate,(final_img_length,final_img_length,final_img_slice))
+    image_blur = aug_blur['image']
+    image_gauss = aug_gauss['image']
+    image_bright = aug_bright['image']
     #image_combo1 = aug_combo1['image']
     #image_combo1 = np.reshape(image_combo1, (final_img_length, final_img_length, final_img_slice))
     #image_combo2 = aug_combo1['image']
@@ -326,20 +326,20 @@ y_augmented = np.asarray(y_augmented)
     #image_combo3 = aug_combo1['image']
     #image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
-    #x_val_augmented.append(image_flip)
-    #x_val_augmented.append(image_rotate)
-    #x_val_augmented.append(image_blur)
-    #x_val_augmented.append(image_gauss)
-    #x_val_augmented.append(image_bright)
+    x_val_augmented.append(image_flip)
+    x_val_augmented.append(image_rotate)
+    x_val_augmented.append(image_blur)
+    x_val_augmented.append(image_gauss)
+    x_val_augmented.append(image_bright)
     #x_val_augmented.append(image_combo1)
     #x_val_augmented.append(image_combo2)
     #x_val_augmented.append(image_combo3)
 
-    #y_val_augmented.append(y_valtest_label[i])
-    #y_val_augmented.append(y_valtest_label[i])
-    #y_val_augmented.append(y_valtest_label[i])
-    #y_val_augmented.append(y_valtest_label[i])
-    #y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
+    y_val_augmented.append(y_valtest_label[i])
     #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])
     #y_val_augmented.append(y_val_label[i])
@@ -364,19 +364,19 @@ y_val_augmented = np.asarray(y_val_augmented)
 
 # CNN Block 1
 input = tf.keras.Input(shape = input_shape, batch_size = batch_size)
-x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1")(input)
+x = tf.keras.layers.Conv3D(8, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1")(input)
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
 x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
-#x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
+x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
-#x = tf.keras.layers.BatchNormalization(name='bn2')(x)
-#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
-#x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
+x = tf.keras.layers.BatchNormalization(name='bn2')(x)
+x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
+x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
 # find filter integer
-#x = tf.keras.layers.BatchNormalization(name='bn3')(x)
-#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool3")(x)
+x = tf.keras.layers.BatchNormalization(name='bn3')(x)
+x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool3")(x)
 
 #CNN Block 2-5
 #for j in range(1): #change to 3 blocks
