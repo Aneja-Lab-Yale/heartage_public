@@ -23,7 +23,6 @@ from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
 import pandas as pd
 import numpy as np
-#from sklearn.decomposition import PCA
 
 
 #project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
@@ -109,9 +108,9 @@ csv_log_file = project_root + 'results/model_log_' + detail +'.csv' # change to 
 batch_size = 2
 # start small on batch (2-3)
 # size of batch is 10 samples before updating parameters
-epochs = 80
+epochs = 200
 # number of times training set is run for algorithm to learn
-patience = 80
+patience = 15
 # how many epochs that it doesn't improve and then stops
 min_lr = .0001
 # minimum learning rate
@@ -151,7 +150,7 @@ for j,patient in enumerate(images):
     images[j] = zeroed / std_intensity
 
 indices = np.arange(len(images))
-x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.4, stratify =age_class, random_state = 42)
+x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.3, stratify =age_class, random_state = 42)
 
 #x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
 
@@ -182,10 +181,6 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
     #valtest_ID.append(patient_IDs[idx2[patient]])
 #for patient in range(len(idx1)):
     #train_ID.append(patient_IDs[idx1[patient]])
-
-#pca = PCA(n_components=32)
-#X_train_pca = pca.fit_transform(x_train)
-#X_test_pca = pca.transform(x_valtest)
 
 y_expected = np.asarray(y_valtest_label)
 x_test_plug = np.asarray(x_valtest)
@@ -364,15 +359,15 @@ y_val_augmented = np.asarray(y_val_augmented)
 
 # CNN Block 1
 input = tf.keras.Input(shape = input_shape, batch_size = batch_size)
-x = tf.keras.layers.Conv3D(8, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1",kernel_regularizer= tf.keras.regularizers.L1L2(l1=0.01, l2=0.01))(input)
+x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv1",kernel_regularizer='l1_l2')(input)
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
-x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2",kernel_regularizer= tf.keras.regularizers.L1L2(l1=0.01, l2=0.01))(x)
+#x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
+#x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
 # find filter integer
-x = tf.keras.layers.BatchNormalization(name='bn2')(x)
-x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
+#x = tf.keras.layers.BatchNormalization(name='bn2')(x)
+#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
 #x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
 # find filter integer
 #x = tf.keras.layers.BatchNormalization(name='bn3')(x)
@@ -390,13 +385,13 @@ x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpo
 
 #CNN output
 x1 = tf.keras.layers.Flatten(name='output')(x)
-x2 = tf.keras.layers.Dropout(0.2,name='dropoutdense')(x1)
+x2 = tf.keras.layers.Dropout(0.5,name='dropoutdense')(x1)
 # fraction of the input units to drop
-x2 = tf.keras.layers.Dense(16, activation = 'relu', kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.01, l2=0.01))(x2)
-x2 = tf.keras.layers.Dropout(0.2,name='dropoutdense2')(x2)
-x2 = tf.keras.layers.Dense(8, activation = 'relu', kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.01, l2=0.01))(x2)
+x2 = tf.keras.layers.Dense(16, activation = 'relu', kernel_regularizer="l1_l2")(x2)
+#x2 = tf.keras.layers.Dropout(0.1,name='dropoutdense2')(x2)
+x2 = tf.keras.layers.Dense(8, activation = 'relu', kernel_regularizer="l1_l2")(x2)
 # fraction of the input units to drop
-output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.01, l2=0.01))(x2)
+output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l1_l2")(x2)
 #output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l2")(x2)
 #positive integer, dimensionality of the output space
 
