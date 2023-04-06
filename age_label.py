@@ -18,7 +18,7 @@ age_data = pd.read_excel(r"C:\Users\Crystal\Desktop\College\PMAE\Thesis\CT_scan_
 cac_seg = pd.read_excel(r"C:\Users\Crystal\Desktop\College\PMAE\Thesis\CAC_ManualSegmentations.xlsx")
 
 # Extracting column data and making into lists
-patient_labels =  list(age_data["pid"]) #Extracting patient ID column (i.e. 100260)
+patient_labels = list(age_data["pid"]) #Extracting patient ID column (i.e. 100260)
 age_labels = list(age_data["age"]) #Extracting patient age column (i.e. 68)
 cac_patientIDs = list(cac_seg["patientID"]) #Extracting patient ID column (i.e. NLST_100260)
 new_number = list(cac_seg["Number Key"]) #Extracting new NLST numbering convention (i.e. 3)
@@ -33,22 +33,27 @@ for i in range(len(new_number)):
     new_number[i] = "NLST_" + str(new_number[i]) #renames NLST_xxxxxx as NLST_xxx as notated in CAC segmentation excel
 
 #bad_scans = [71,73,90,95,105,161,195,201,218,304] #indices of bad scans in cac segmentation list
-# NLST_017 NLST_022 NLST_029 NLST_042 NLST_094 NLST_110 NLST_158 NLST_169 NLST_192 -> scans w/o image-mask dim match
-# above indices = [16,21,28,41,93,109,157,168,191]
-bad_scans = [16,21,28,36,41,51,63,65,67,68,69,70,71,73,74,75,76,77,79,81,82,83,85,86,87,90,91,93,94,95,96,97,98,99,100,103,104,105,106,107,109,113,115,116,117,119,120,122,123,124,125,126,127,131,132,133,134,135,136,137,138,139,142,144,145,147,148,149,151,152,153,154,155,156,157,158,159,160,161,163,164,166,168,169,170,176,177,178,179,180,183,184,185,186,187,190,191,192,193,195,197,198,199,200,201,203,205,207,208,209,210,211,213,214,215,216,218,219,221,223,224,225,226,227,228,229,230,231,232,233,235,236,237,241,243,244,245,246,248,249,250,251,252,253,255,256,257,259,261,262,263,264,265,266,267,268,269,270,271,272,273,274,276,277,279,280,282,283,284,285,286,289,290,291,292,294,298,299,300,301,302,304,305,306]
+# ['NLST_017', 'NLST_022', 'NLST_029', 'NLST_042', 'NLST_069', 'NLST_092', 'NLST_094', 'NLST_105', 'NLST_110',
+# 'NLST_117', 'NLST_120', 'NLST_124', 'NLST_138', 'NLST_153', 'NLST_158', 'NLST_161', 'NLST_169', 'NLST_178',
+# 'NLST_179', 'NLST_184', 'NLST_188', 'NLST_192', 'NLST_215', 'NLST_226', 'NLST_263', 'NLST_277', 'NLST_280',
+# 'NLST_283', 'NLST_284', 'NLST_302', 'NLST_307'] -> scans w/o image-mask dim match
+# above indices = [16,21,28,41,68,91,93,104,109,116,119,123,137,152,157,160,168,177,178,183,187,191,214,225,262,276,279,282,283,301,306]
+# missing NLST_037 seg [index = 36]
+# complied indices = [16,21,28,36,41,68,71,73,90,91,93,95,104,105,109,116,119,123,137,152,157,160,161,168,177,178,183,187,191,195,201,214,218,225,262,276,279,282,283,301,304,306]
+bad_scans = [16,21,28,36,41,68,71,73,90,91,93,95,104,105,109,116,119,123,137,152,157,160,161,168,177,178,183,187,191,195,201,214,218,225,262,276,279,282,283,301,304,306]
 new_ID_list = [] #new ID list with bad scans removed
 corrected_NLST = [] #new list of 3 digit NLST labelling with bad scans removed
 
-print(len(bad_scans))
-print(len(new_number))
+#print(len(bad_scans))
+#print(len(new_number))
 # Removes bad scans
 for i in range(len(new_number)):
     if i not in bad_scans:
         new_ID_list.append(cac_patientIDs[i])
         corrected_NLST.append(new_number[i])
 
-print(len(corrected_NLST))
-np.save(project_root + 'corrected_NLST.npy', corrected_NLST)
+#print(len(corrected_NLST))
+np.save(project_root + 'data/corrected_NLST.npy', corrected_NLST)
 #print(new_ID_list[71])
 #print(corrected_NLST[71])
 #print(len(new_ID_list))
@@ -66,7 +71,6 @@ for j in range(len(new_ID_list)): # for each patient ID in new patient ID list
 
 np.savetxt(project_root + "ages.csv", new_age, delimiter=",",fmt='%i')
 np.save(project_root + 'data/ages.npy',new_age)
-
 
 age_class = []
 
@@ -90,7 +94,7 @@ for i in range(len(new_age)):
 
     age_class.append(age_bin)
 
-np.savetxt(project_root + "data/age_class.csv", age_class, delimiter=",",fmt='%i')
+#np.savetxt(project_root + "data/age_class.csv", age_class, delimiter=",",fmt='%i')
 np.save(project_root + 'data/age_class.npy', age_class)
 #print(len(new_age))
 #print(corrected_NLST[71])

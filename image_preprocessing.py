@@ -38,28 +38,31 @@ patient_IDs = list(np.load(project_root + 'data/corrected_NLST.npy'))
 # age_labels = [63,67,58,57] #age list
 # age_labels = new_age #new age list from age_label.py
 
-patient_list = [] # sets up list of overlaid image and mask array
-patient_shape = [] # sets up list of shapes of overlay arrays
+#patient_list = [] # sets up list of overlaid image and mask array
+#patient_shape = [] # sets up list of shapes of overlay arrays
 
-# i_dim = []
-# m_dim = []
-# wrong = []
+#i_dim = []
+#m_dim = []
+#bad_IDs = []
 
-for i, patient in enumerate(patient_IDs):
+patient_list = []
+patient_shape = []
+
+for i,patient in enumerate(patient_IDs):
 # for i in range(20):
     # getting image and masks of each patients from files
     image, affine, voxsize, coords = load_nifti(os.path.join(image_path, patient_IDs[i] + '.nii.gz'), return_voxsize = True, return_coords=True)
 
     mask, affine2, voxsize, coords = load_nifti(os.path.join(mask_path,'Heart_'+ patient_IDs[i] + '.nii.gz'), return_voxsize = True, return_coords=True)
 
-    # i_shape = image.shape
-    # m_shape = mask.shape
+    #i_shape = image.shape
+    #m_shape = mask.shape
 
-    # i_dim.append(i_shape)
-    # m_dim.append(m_shape)
+    #i_dim.append(i_shape)
+    #m_dim.append(m_shape)
 
-    # if i_shape != m_shape:
-        # wrong.append(i)
+    #if i_shape != m_shape:
+        #bad_IDs.append(patient_IDs[i])
 
     # sets voxel size and other image features to be the same in the mask and image
     assert image.shape == mask.shape
@@ -72,10 +75,9 @@ for i, patient in enumerate(patient_IDs):
     overlay = np.multiply(image_array,mask_array) #overlays the two to get just the total heart area of image
 
     #put patient arrays into a list
-    patient_list.append(overlay) #puts patient overlays into list [array1 array2 ...]
+    patient_list.append(overlay.astype('float32')) #puts patient overlays into list [array1 array2 ...]
     patient_shape.append(overlay.shape) #puts patient overlay shapes into list [array1_shape array2_shape ...]
 
-print('done')
 #print(patient_shape)
 
 #ax = fig.add_subplot(1, 4, 1)
@@ -94,16 +96,17 @@ print('done')
 cropped = []
 cropped_shape = []
 
-for i,patient in enumerate(patient_IDs): #loop through each patient overlay array
+for i in range(len(patient_list)): #loop through each patient overlay array
 #for i in range(20):
     crop_indices = np.nonzero(patient_list[i])
     #heart_section = [*set(crop_indices[2])]
     start_depth = min(crop_indices[2])
     end_depth = max(crop_indices[2])
 
-    crop_img = patient_list[i][100:500,100:500, start_depth:end_depth+1]
+    crop_img = patient_list[i][:,:, start_depth:end_depth+1]
     cropped.append(crop_img)
     cropped_shape.append(crop_img.shape)
+
 
 #print(cropped_shape)
 
