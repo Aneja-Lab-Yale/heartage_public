@@ -108,7 +108,7 @@ csv_log_file = project_root + 'results/model_log_' + detail +'.csv' # change to 
 batch_size = 2
 # start small on batch (2-3)
 # size of batch is 10 samples before updating parameters
-epochs = 200
+epochs = 80
 # number of times training set is run for algorithm to learn
 patience = 15
 # how many epochs that it doesn't improve and then stops
