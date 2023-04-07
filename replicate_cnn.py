@@ -182,8 +182,8 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2,age_class_train,age_cl
 #for patient in range(len(idx1)):
     #train_ID.append(patient_IDs[idx1[patient]])
 
-#y_expected = np.asarray(y_valtest_label)
-y_expected = np.asarray(age_class_valtest)
+y_expected = np.asarray(y_valtest_label)
+y_class = np.asarray(age_class_valtest)
 x_test_plug = np.asarray(x_valtest)
 
 #np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
@@ -433,11 +433,11 @@ for i in range(len(y_predicted)):
 results = model.evaluate(x_test_plug,y_expected)
 model_metrics = model.metrics_names
 #r2 = r2_score(y_expected, y_predicted)
-r2 = r2_score(y_expected, age_class_pred)
+r2 = r2_score(y_class, age_class_pred)
 model_metrics.append('r2')
 results.append(r2)
 
-corr, _ = pearsonr(y_expected, age_class_pred)
+corr, _ = pearsonr(y_class, age_class_pred)
 model_metrics.append('r')
 results.append(corr)
 
@@ -498,8 +498,8 @@ plt.savefig(fig_mae)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
-plt.scatter(y_expected,age_class_pred)
-plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
+plt.scatter(y_class,age_class_pred)
+plt.plot([min(y_class), max(y_class)], [min(y_class), max(y_class)], 'k--', lw=4)
 #plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
 #plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('comparison '+ detail)
