@@ -433,11 +433,11 @@ for i in range(len(y_predicted)):
 results = model.evaluate(x_test_plug,y_expected)
 model_metrics = model.metrics_names
 #r2 = r2_score(y_expected, y_predicted)
-r2 = r2_score(age_class_valtest, age_class_pred)
+r2 = r2_score(y_expected, age_class_pred)
 model_metrics.append('r2')
 results.append(r2)
 
-corr, _ = pearsonr(age_class_valtest, age_class_pred)
+corr, _ = pearsonr(y_expected, age_class_pred)
 model_metrics.append('r')
 results.append(corr)
 
@@ -498,8 +498,8 @@ plt.savefig(fig_mae)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
-plt.scatter(age_class_valtest,age_class_pred)
-plt.plot([min(age_class_valtest), max(age_class_valtest)], [min(age_class_valtest), max(age_class_valtest)], 'k--', lw=4)
+plt.scatter(y_expected,age_class_pred)
+plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
 #plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
 #plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('comparison '+ detail)
