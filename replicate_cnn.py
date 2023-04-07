@@ -150,7 +150,7 @@ for j,patient in enumerate(images):
     images[j] = zeroed / std_intensity
 
 indices = np.arange(len(images))
-x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.3, stratify =age_class, random_state = 42)
+x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2,age_class_train,age_class_valtest = train_test_split(images,age_labels,indices,age_class, test_size = 0.3, stratify =age_class, random_state = 42)
 
 #x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
 
@@ -182,7 +182,8 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
 #for patient in range(len(idx1)):
     #train_ID.append(patient_IDs[idx1[patient]])
 
-y_expected = np.asarray(y_valtest_label)
+#y_expected = np.asarray(y_valtest_label)
+y_expected = np.asarray(age_class_valtest)
 x_test_plug = np.asarray(x_valtest)
 
 #np.save(project_root + '/results/test_ID_' + detail + '.npy', test_ID)
@@ -416,13 +417,27 @@ history = model.fit(x_augmented, y_augmented,
 
 y_predicted = model.predict(x_test_plug, batch_size=batch_size)
 
+age_class_pred = []
+for i in range(len(y_predicted)):
+    if y_predicted[i] <= 60:
+        age_bin = 0
+    elif 60 < y_predicted[i] <= 65:
+        age_bin = 1
+    elif 65 < y_predicted[i] <= 70:
+        age_bin = 2
+    elif 70 < y_predicted[i]:
+        age_bin = 3
+
+    age_class_pred.append(age_bin)
+
 results = model.evaluate(x_test_plug,y_expected)
 model_metrics = model.metrics_names
-r2 = r2_score(y_expected, y_predicted)
+#r2 = r2_score(y_expected, y_predicted)
+r2 = r2_score(age_class_valtest, age_class_pred)
 model_metrics.append('r2')
 results.append(r2)
 
-corr, _ = pearsonr(y_expected, y_predicted)
+corr, _ = pearsonr(age_class_valtest, age_class_pred)
 model_metrics.append('r')
 results.append(corr)
 
@@ -483,8 +498,8 @@ plt.savefig(fig_mae)
 
 #compare predicted and true age
 plt.figure(figsize=(10,8))
-plt.scatter(y_expected,y_predicted)
-plt.plot([min(y_expected), max(y_expected)], [min(y_expected), max(y_expected)], 'k--', lw=4)
+plt.scatter(age_class_valtest,age_class_pred)
+plt.plot([min(age_class_valtest), max(age_class_valtest)], [min(age_class_valtest), max(age_class_valtest)], 'k--', lw=4)
 #plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
 #plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('comparison '+ detail)
