@@ -536,7 +536,7 @@ plt.xlabel('true age')
 plt.savefig(fig_prediction)
 
 #Plotting the confusion matrix
-plt.figure(figsize=(5,4))
+plt.figure(figsize=(10,8))
 sns.heatmap(age_df, annot=True)
 plt.title('Confusion Matrix')
 plt.ylabel('Actual Values')
