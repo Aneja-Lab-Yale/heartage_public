@@ -486,9 +486,6 @@ dict = {'Metric': model_metrics, 'Value': results}
 df = pd.DataFrame(dict)
 df.to_csv(project_root + '/results/test_evaluation_' + detail + '.csv',index=False)
 
-#np.savetxt(project_root +'results/scores.csv',evaluation)
-#a=np.array(y_predicted)
-#y_predicted_label = np.where(a)[2]
 np.savetxt(project_root + 'results/age_predictions_reg_' + detail +'.csv', y_predicted, delimiter=",",fmt='%i')
 
 #np.savetxt(project_root + 'results/age_expected_bin.csv', age_class_ex, delimiter=",",fmt='%i')
