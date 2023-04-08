@@ -163,7 +163,6 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
 #y_train_label = np.asarray(y_train_label)
 #y_test_label = np.asarray(y_test_label)
 
-
 #test_ID = []
 #val_ID = []
 #train_age_new = []
@@ -184,6 +183,8 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
 #for patient in range(len(idx1)):
     #train_ID.append(patient_IDs[idx1[patient]])
 
+#np.savetxt(project_root + "/results/valtest_ID.csv", valtest_ID, delimiter=",",fmt='%s')
+
 y_expected = np.asarray(y_valtest_label)
 x_test_plug = np.asarray(x_valtest)
 
@@ -191,7 +192,7 @@ x_test_plug = np.asarray(x_valtest)
 #np.save(project_root + '/results/train_ID_' + detail + '.npy', train_ID)
 #np.save(project_root + '/results/val_ID_' + detail + '.npy', val_ID)
 #np.save(project_root + '/results/valtest_ID_' + detail + '.npy', valtest_ID)
-#np.savetxt(project_root + "/results/valtest_age.csv", valtest_age, delimiter=",",fmt='%i')
+#np.savetxt(project_root + "/results/valtest_age.csv", y_valtest_label, delimiter=",",fmt='%i')
 #np.savetxt(project_root + "/results/train_age_new.csv", train_age_new, delimiter=",",fmt='%i')
 
 #Data Augmentation
@@ -441,6 +442,7 @@ for i in range(len(y_expected)):
 
     age_class_ex.append(age_bin)
 
+
 age_class_pred = []
 for i in range(len(y_predicted)):
     if y_predicted[i] <= 57:
@@ -488,6 +490,9 @@ df.to_csv(project_root + '/results/test_evaluation_' + detail + '.csv',index=Fal
 #a=np.array(y_predicted)
 #y_predicted_label = np.where(a)[2]
 np.savetxt(project_root + 'results/age_predictions_reg_' + detail +'.csv', y_predicted, delimiter=",",fmt='%i')
+
+#np.savetxt(project_root + 'results/age_expected_bin.csv', age_class_ex, delimiter=",",fmt='%i')
+np.savetxt(project_root + 'results/age_predictions_bin_' + detail +'.csv', age_class_pred, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
 #plt.plot(history.history['accuracy'])
