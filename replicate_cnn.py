@@ -32,7 +32,7 @@ import seaborn as sns
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
 project_root = '/home/crystal_cheung/'
-detail = 'apr8_mae_waug_2yr_bins'
+detail = 'apr12_mae_waug_10yr'
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
@@ -421,48 +421,24 @@ y_predicted = model.predict(x_test_plug, batch_size=batch_size)
 
 age_class_ex = []
 for i in range(len(y_expected)):
-    if y_expected[i] <= 57:
-        age_bin = 0
-    elif 57 < y_expected[i] <= 59:
+    if y_expected[i] <= 60:
         age_bin = 1
-    elif 59 < y_expected[i] <= 61:
+    elif 60 < y_expected[i] <= 70:
         age_bin = 2
-    elif 61 < y_expected[i] <= 63:
+    elif 70 < y_expected[i]:
         age_bin = 3
-    elif 63 < y_expected[i] <= 65:
-        age_bin = 4
-    elif 65 < y_expected[i] <= 67:
-        age_bin = 5
-    elif 67 < y_expected[i] <= 69:
-        age_bin = 6
-    elif 69 < y_expected[i] <= 71:
-        age_bin = 7
-    elif 71 < y_expected[i]:
-        age_bin = 8
 
     age_class_ex.append(age_bin)
 
 
 age_class_pred = []
 for i in range(len(y_predicted)):
-    if y_predicted[i] <= 57:
-        age_bin = 0
-    elif 57 < y_predicted[i] <= 59:
+    if y_predicted[i] <= 60:
         age_bin = 1
-    elif 59 < y_predicted[i] <= 61:
+    elif 60 < y_predicted[i] <= 70:
         age_bin = 2
-    elif 61 < y_predicted[i] <= 63:
+    elif 70 < y_predicted[i]:
         age_bin = 3
-    elif 63 < y_predicted[i] <= 65:
-        age_bin = 4
-    elif 65 < y_predicted[i] <= 67:
-        age_bin = 5
-    elif 67 < y_predicted[i] <= 69:
-        age_bin = 6
-    elif 69 < y_predicted[i] <= 71:
-        age_bin = 7
-    elif 71 < y_predicted[i]:
-        age_bin = 8
 
     age_class_pred.append(age_bin)
 
@@ -475,8 +451,8 @@ results.append(r2)
 
 cm = confusion_matrix(age_class_ex, age_class_pred)
 age_df = pd.DataFrame(cm,
-                     index = ['57-','58/59','60/61','62/63','64/65','66/67','68/69','70/71','71+'],
-                     columns = ['57-','58/59','60/61','62/63','64/65','66/67','68/69','70/71','71+'])
+                     index = ['60','61-70','71+'],
+                     columns = ['60','61-70','71+'])
 
 corr, _ = pearsonr(age_class_ex, age_class_pred)
 model_metrics.append('r')
