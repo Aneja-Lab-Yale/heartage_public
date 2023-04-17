@@ -4,11 +4,11 @@ import numpy as np
 #import seaborn as sns
 
 project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
-detail = 'apr12_mae_waug_10yr'
+detail = 'apr16_mae_waug_10yr'
 
 test_IDs = pd.read_csv(project_root + "/results/valtest_ID.csv",header=None)
 heart_volumes = pd.read_csv(project_root + '/results/heart_sizes.csv',header=None)
-expected_age_bins = pd.read_csv(project_root + 'results/age_expected_bin.csv',header=None)
+expected_age_bins = pd.read_csv(project_root + 'results/age_expected_bin_'+detail+'.csv',header=None)
 predicted_age_bins = pd.read_csv(project_root + 'results/age_predictions_bin_'+detail+'.csv',header=None)
 full_list_gender = pd.read_csv(project_root + 'data/gender.csv',header=None)
 full_list_smoke = pd.read_csv(project_root + 'data/smoke.csv',header = None)
