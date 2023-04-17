@@ -81,10 +81,6 @@ dict = {'Patient ID': corrected_NLST, 'Gender': gender}
 df = pd.DataFrame(dict)
 df.to_csv(project_root + 'data/gender.csv',index=False)
 
-dict1 = {'Patient ID': corrected_NLST, 'Packs': smoke}
-sm = pd.DataFrame(dict1)
-sm.to_csv(project_root + 'data/smoke.csv',index=False)
-
 np.save(project_root + 'data/gender.npy',gender)
 np.savetxt(project_root + "ages.csv", new_age, delimiter=",",fmt='%i')
 np.save(project_root + 'data/ages.npy',new_age)

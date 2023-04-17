@@ -27,11 +27,11 @@ import numpy as np
 import seaborn as sns
 
 
-#project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-project_root = '/home/crystal_cheung/'
+#project_root = '/home/crystal_cheung/'
 detail = 'apr16_mae_waug_10yr'
 def callbacks_model(model_save_path,
                     csv_log_file,
@@ -166,15 +166,11 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
 #test_ID = []
 #val_ID = []
 #train_age_new = []
-#for id in range(len(idx4)):
-    #image_index = idx1[idx4[id]]
-    #test_ID.append(patient_IDs[image_index])
-#for id in range(len(idx3)):
-    #image_index = idx1[idx3[id]]
-    #train_ID.append(patient_IDs[image_index])
+#test_age_new =[]
+#for id in range(len(idx1)):
     #train_age_new.append(y_train_label[id])
 #for id in range(len(idx2)):
-    #val_ID.append(patient_IDs[idx2[id]])
+    #test_age_new.append(y_valtest_label[id])
 
 #train_ID = []
 #valtest_ID = []
@@ -184,7 +180,8 @@ x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(ima
     #train_ID.append(patient_IDs[idx1[patient]])
 
 #np.savetxt(project_root + "/results/valtest_ID.csv", valtest_ID, delimiter=",",fmt='%s')
-
+#train_age_new = np.asarray(train_age_new)
+#test_age_new = np.asarray(test_age_new)
 y_expected = np.asarray(y_valtest_label)
 x_test_plug = np.asarray(x_valtest)
 
@@ -194,6 +191,7 @@ x_test_plug = np.asarray(x_valtest)
 #np.save(project_root + '/results/valtest_ID_' + detail + '.npy', valtest_ID)
 #np.savetxt(project_root + "/results/valtest_age.csv", y_valtest_label, delimiter=",",fmt='%i')
 #np.savetxt(project_root + "/results/train_age_new.csv", train_age_new, delimiter=",",fmt='%i')
+#np.savetxt(project_root + "/results/test_age_new.csv", test_age_new, delimiter=",",fmt='%i')
 
 #Data Augmentation
 x_augmented = x_train
