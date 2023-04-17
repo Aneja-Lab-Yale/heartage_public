@@ -20,6 +20,8 @@ cac_seg = pd.read_excel(r"C:\Users\Crystal\Desktop\College\PMAE\Thesis\CAC_Manua
 # Extracting column data and making into lists
 patient_labels = list(age_data["pid"]) #Extracting patient ID column (i.e. 100260)
 age_labels = list(age_data["age"]) #Extracting patient age column (i.e. 68)
+gender_labels = list(age_data["gender"])
+pkyr = list(age_data["pkyr"])
 cac_patientIDs = list(cac_seg["patientID"]) #Extracting patient ID column (i.e. NLST_100260)
 new_number = list(cac_seg["Number Key"]) #Extracting new NLST numbering convention (i.e. 3)
 
@@ -60,6 +62,8 @@ np.save(project_root + 'data/corrected_NLST.npy', corrected_NLST)
 #print(len(corrected_NLST))
 
 new_age = [] #initialize age list
+gender = []
+smoke = []
 
 # Matches ages from CT data to NLST in CAC segmentation
 for j in range(len(new_ID_list)): # for each patient ID in new patient ID list
@@ -67,8 +71,21 @@ for j in range(len(new_ID_list)): # for each patient ID in new patient ID list
         if new_ID_list[j] == patient_labels[k]: # if the NLST_xxxxxx matches between the two
 
             new_age.append(age_labels[k]) #takes the corresponding CT data patient index to get age and adds to a list of new ages that matches CAC excel
+            gender.append(gender_labels[k])
+            smoke.append(pkyr[k])
+
             break # skips to outer for loop once found
 
+
+dict = {'Patient ID': corrected_NLST, 'Gender': gender}
+df = pd.DataFrame(dict)
+df.to_csv(project_root + 'data/gender.csv',index=False)
+
+dict1 = {'Patient ID': corrected_NLST, 'Packs': smoke}
+sm = pd.DataFrame(dict1)
+sm.to_csv(project_root + 'data/smoke.csv',index=False)
+
+np.save(project_root + 'data/gender.npy',gender)
 np.savetxt(project_root + "ages.csv", new_age, delimiter=",",fmt='%i')
 np.save(project_root + 'data/ages.npy',new_age)
 

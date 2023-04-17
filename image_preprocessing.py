@@ -18,6 +18,7 @@ import math
 # import matplotlib.pyplot as plt
 from scipy.ndimage import zoom
 import statistics
+import pandas as pd
 
 project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
@@ -47,13 +48,14 @@ patient_IDs = list(np.load(project_root + 'data/corrected_NLST.npy'))
 
 patient_list = []
 patient_shape = []
+heart_size = []
 
 for i,patient in enumerate(patient_IDs):
 # for i in range(20):
     # getting image and masks of each patients from files
     image, affine, voxsize, coords = load_nifti(os.path.join(image_path, patient_IDs[i] + '.nii.gz'), return_voxsize = True, return_coords=True)
 
-    mask, affine2, voxsize, coords = load_nifti(os.path.join(mask_path,'Heart_'+ patient_IDs[i] + '.nii.gz'), return_voxsize = True, return_coords=True)
+    mask, affine2, voxsize2, coords2 = load_nifti(os.path.join(mask_path,'Heart_'+ patient_IDs[i] + '.nii.gz'), return_voxsize = True, return_coords=True)
 
     #i_shape = image.shape
     #m_shape = mask.shape
@@ -73,10 +75,17 @@ for i,patient in enumerate(patient_IDs):
     image_array = np.array(image) #make array from whole CT
     mask_array = np.array(mask) #make array from total heart segment mask
     overlay = np.multiply(image_array,mask_array) #overlays the two to get just the total heart area of image
+    nonzero_voxels = np.count_nonzero(overlay)
+    volume = voxsize[0] * voxsize[1] * voxsize[2] * nonzero_voxels
+    heart_size.append(volume)
 
     #put patient arrays into a list
     patient_list.append(overlay.astype('float32')) #puts patient overlays into list [array1 array2 ...]
     patient_shape.append(overlay.shape) #puts patient overlay shapes into list [array1_shape array2_shape ...]
+
+dict = {'Patient ID': patient_IDs, 'Heart size': heart_size}
+df = pd.DataFrame(dict)
+df.to_csv(project_root + '/results/heart_sizes.csv',index=False)
 
 #print(patient_shape)
 

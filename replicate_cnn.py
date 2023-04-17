@@ -464,7 +464,7 @@ df.to_csv(project_root + '/results/test_evaluation_' + detail + '.csv',index=Fal
 
 np.savetxt(project_root + 'results/age_predictions_reg_' + detail +'.csv', y_predicted, delimiter=",",fmt='%i')
 
-#np.savetxt(project_root + 'results/age_expected_bin.csv', age_class_ex, delimiter=",",fmt='%i')
+np.savetxt(project_root + 'results/age_expected_bin' + detail +'.csv', age_class_ex, delimiter=",",fmt='%i')
 np.savetxt(project_root + 'results/age_predictions_bin_' + detail +'.csv', age_class_pred, delimiter=",",fmt='%i')
 
 # summarize history for accuracy
