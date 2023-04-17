@@ -32,7 +32,7 @@ import seaborn as sns
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
 project_root = '/home/crystal_cheung/'
-detail = 'apr12_mae_waug_10yr'
+detail = 'apr16_mae_waug_10yr'
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
