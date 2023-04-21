@@ -12,10 +12,11 @@ expected_age_bins = pd.read_csv(project_root + 'results/age_expected_bin_'+detai
 predicted_age_bins = pd.read_csv(project_root + 'results/age_predictions_bin_'+detail+'.csv',header=None)
 full_list_gender = pd.read_csv(project_root + 'data/gender.csv',header=None)
 train_age = pd.read_csv(project_root + 'results/train_age_new.csv',header=None)
-
+test_age = pd.read_csv(project_root + 'results/test_age_new.csv',header=None)
 
 test_IDs = np.asarray(test_IDs)
 train_age = np.asarray(train_age)
+test_age = np.asarray(test_age)
 heart_volumes = np.asarray(heart_volumes)
 full_list_gender = np.asarray(full_list_gender)
 expected_age_bins = np.asarray(expected_age_bins)
@@ -76,6 +77,7 @@ for i in range(len(sorted_test_data)):
         over_under.append('under')
 
 sorted_test_data = np.column_stack((sorted_test_data, over_under))
+sorted_test_data = np.column_stack((sorted_test_data, test_age))
 
 train_dict = {'PatientID':train_data[:,0],'Expected Age':train_data[:,1],'Gender':train_data[:,2]}
 train_df = pd.DataFrame(train_dict)
@@ -83,6 +85,6 @@ train_df.to_csv(project_root + 'results/train_data.csv',index=False)
 
 heartage_dict = {'Patient ID': sorted_test_data[:,0], 'Heart size': sorted_test_data[:,1],'Gender':sorted_test_data[:,2],
                  'Expected age bin':sorted_test_data[:,3],'Predicted age bin':sorted_test_data[:,4],
-                 'Bin difference':sorted_test_data[:,5],'Over-under':sorted_test_data[:,6]}
+                 'Bin difference':sorted_test_data[:,5],'Over-under':sorted_test_data[:,6],'Age':sorted_test_data[:,7]}
 df = pd.DataFrame(heartage_dict)
 df.to_csv(project_root + 'results/sorted_test_data.csv',index=False)
