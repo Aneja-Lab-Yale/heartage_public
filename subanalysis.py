@@ -3,7 +3,7 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import seaborn as sns
 
-project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/ckc42/Desktop/thesis/'
 detail = 'apr16_mae_waug_10yr'
 
 test_IDs = pd.read_csv(project_root + "results/valtest_ID.csv",header=None)

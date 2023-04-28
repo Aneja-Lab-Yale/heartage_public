@@ -9,13 +9,13 @@
 import pandas as pd
 import numpy as np
 
-project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+project_root = '/Users/ckc42/Desktop/thesis/'
 #project_root = '/home/crystal_cheung/heartage/data/'
 
 # Reads in CT scan excel with patient ages
-age_data = pd.read_excel(r"C:\Users\Crystal\Desktop\College\PMAE\Thesis\CT_scan_data.xlsx")
+age_data = pd.read_excel(r"C:\Users\ckc42\Desktop\thesis\CT_scan_data.xlsx")
 # Reads in CAC manual segmentation excel with new NLST numbering convention
-cac_seg = pd.read_excel(r"C:\Users\Crystal\Desktop\College\PMAE\Thesis\CAC_ManualSegmentations.xlsx")
+cac_seg = pd.read_excel(r"C:\Users\ckc42\Desktop\thesis\CAC_ManualSegmentations.xlsx")
 
 # Extracting column data and making into lists
 patient_labels = list(age_data["pid"]) #Extracting patient ID column (i.e. 100260)
