@@ -3,13 +3,16 @@
 # Aneja Lab | Yale School of Medicine
 # Crystal Cheung
 # Created (02/22/23)
-# Updated (02/23/23)
+# Updated (05/01/23)
 
 # Imports
 import pandas as pd
 import numpy as np
 
+# local path
 project_root = '/Users/ckc42/Desktop/thesis/'
+
+# server path
 #project_root = '/home/crystal_cheung/heartage/data/'
 
 # Reads in CT scan excel with patient ages
@@ -46,37 +49,31 @@ bad_scans = [16,21,28,36,41,68,71,73,90,91,93,95,104,105,109,116,119,123,137,152
 new_ID_list = [] #new ID list with bad scans removed
 corrected_NLST = [] #new list of 3 digit NLST labelling with bad scans removed
 
-#print(len(bad_scans))
-#print(len(new_number))
 # Removes bad scans
 for i in range(len(new_number)):
     if i not in bad_scans:
         new_ID_list.append(cac_patientIDs[i])
         corrected_NLST.append(new_number[i])
 
-#print(len(corrected_NLST))
 np.save(project_root + 'data/corrected_NLST.npy', corrected_NLST)
-#print(new_ID_list[71])
-#print(corrected_NLST[71])
-#print(len(new_ID_list))
-#print(len(corrected_NLST))
 
-new_age = [] #initialize age list
-gender = []
-smoke = []
+new_age = [] # initialize age list
+gender = [] # initialize gender list
+smoke = [] # initialize smoking list
 
 # Matches ages from CT data to NLST in CAC segmentation
 for j in range(len(new_ID_list)): # for each patient ID in new patient ID list
     for k in range(len(patient_labels)): # for each patient in CT data
         if new_ID_list[j] == patient_labels[k]: # if the NLST_xxxxxx matches between the two
 
-            new_age.append(age_labels[k]) #takes the corresponding CT data patient index to get age and adds to a list of new ages that matches CAC excel
-            gender.append(gender_labels[k])
-            smoke.append(pkyr[k])
+            new_age.append(age_labels[k]) # takes the corresponding CT data patient index to get age and adds to a list of new ages that matches CAC excel
+            gender.append(gender_labels[k]) # does the above but with gender
+            smoke.append(pkyr[k]) # does the above but with smoking packs per year
 
             break # skips to outer for loop once found
 
 
+# creating csv for patient ID and gender
 dict = {'Patient ID': corrected_NLST, 'Gender': gender}
 df = pd.DataFrame(dict)
 df.to_csv(project_root + 'data/gender.csv',index=False)
@@ -92,9 +89,8 @@ age_class = []
 # 1 = 55-60
 # 2 = 60-65
 # 3 = 65-70
-# 4 = 70-75
-# 5 = 75-80
 
+# used for stratifying training and test set in replicate_cnn.py
 for i in range(len(new_age)):
     if new_age[i] <= 60:
         age_bin = 0
@@ -109,7 +105,3 @@ for i in range(len(new_age)):
 
 np.savetxt(project_root + "age_class.csv", age_class, delimiter=",",fmt='%i')
 np.save(project_root + 'data/age_class.npy', age_class)
-#print(len(new_age))
-#print(corrected_NLST[71])
-#print(new_ID_list[71])
-#print(new_age[71])

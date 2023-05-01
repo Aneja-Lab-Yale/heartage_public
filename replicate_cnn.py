@@ -3,20 +3,11 @@
 # Aneja Lab | Yale School of Medicine
 # Crystal Cheung
 # Created (01/27/23)
-# Updated (02/23/23)
+# Updated (05/01/23)
+
 #Import
 import tensorflow as tf
-# importing tensorflow software lib as variable tf (for machine learning)
-# import numpy as np
-# importing numpy software lib as variable np (for math fx)
-#from Useful_Functions.Misc_Functions import listdir_nohidden
-#from Useful_Functions.Misc_Functions import listdir_dicom
-#from Keras_Miscellaneous.Keras_Callbacks import callbacks_model as cb
-#import Keras_Callbacks
-#from Keras_Callbacks import callbacks_model as cb
 import matplotlib.pyplot as plt
-#from pydotplus import graphviz
-#from keras.utils.vis_utils import plot_model
 from sklearn.model_selection import train_test_split
 from volumentations import *
 from sklearn.metrics import r2_score
@@ -24,15 +15,17 @@ from sklearn.metrics import confusion_matrix
 from scipy.stats import pearsonr
 import pandas as pd
 import numpy as np
-import seaborn as sns
 
-
-project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
+# local paths
+# project_root = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/'
 #image_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Whole_CT/'
 #mask_path = '/Users/Crystal/Desktop/College/PMAE/Thesis/Code/Heart_segmentations/'
 
-#project_root = '/home/crystal_cheung/'
+# server paths
+project_root = '/home/crystal_cheung/'
 detail = 'apr16_mae_waug_10yr'
+
+# defines callbacks for keras model
 def callbacks_model(model_save_path,
                     csv_log_file,
                     patience,
@@ -75,6 +68,7 @@ def callbacks_model(model_save_path,
         ]
     return callbacks
 
+# defines learning rate scheduler
 def scheduler(epoch):
 
     initial_lr = 0.001
@@ -89,12 +83,6 @@ def scheduler(epoch):
 
     return lr
 
-#3D CNN
-
-# input sizes are (z x h x w)
-# raw data: 182 x 218 x 182
-# registered data: 121 x 145 x 121
-
 #Folders
 fig_accuracy = project_root + 'results/accuracy_graph_' + detail +'.png'  # change to local folder
 fig_loss = project_root + 'results/loss_graph_' + detail +'.png'  # change to local folder
@@ -102,7 +90,6 @@ fig_mae = project_root + 'results/mae_graph_' + detail +'.png'
 fig_mse = project_root + 'results/mse_graph_' + detail +'.png'  # change to local folder
 fig_confusion = project_root + 'results/confusion_matrix_' + detail +'.png'  # change to local folder
 fig_prediction = project_root + 'results/prediction_graph_' + detail +'.png'
-#fig_AUC = project_root + 'results/AUC_graph_mar27.png'  # change to local folder
 model_save_path = project_root + 'results/saved-model_' + detail +'.hdf5'  # change to local folder
 csv_log_file = project_root + 'results/model_log_' + detail +'.csv' # change to local folder
 
@@ -121,26 +108,22 @@ callbacks_model = callbacks_model(model_save_path, csv_log_file, patience, min_l
 optimizer = tf.keras.optimizers.Adam(use_ema=True)
 # sets optimization for loss
 
-#regression
+#Regression
 #loss= tf.keras.losses.CategoricalCrossentropy(name='loss')
 loss = tf.keras.losses.MeanAbsoluteError(name='loss')
-# mean squared error (regression)
+# mean absolute error (regression)
 # uses tf.keras... function to be the loss
-#met = [tf.keras.metrics.CategoricalAccuracy(name='accuracy')]
 met = [tf.keras.metrics.RootMeanSquaredError(name='rmse'),tf.keras.metrics.MeanAbsoluteError(name='mae'),tf.keras.metrics.MeanSquaredError(name='mse')]
-# met = metrics, set as matrix of accuracy, AUC and false negatives from the tf.keras functions
-# mean squared error
+# met = metrics
 
 # Constants
 final_img_length = 60
 final_img_slice = 47
 input_shape = (final_img_length,final_img_length,final_img_slice,1) # need to fill this in (x, y, z, channel)
-#num_class = 4  # need to fill this in (outcomes:age ranges)
-#age_labels = list(np.load(project_root + 'data/age_class.npy'))
-age_labels = list(np.load(project_root + 'data/ages.npy'))
-images = list(np.load(project_root + 'data/final_images.npy'))
-patient_IDs = list(np.load(project_root + 'data/corrected_NLST.npy'))
-age_class = list(np.load(project_root + 'data/age_class.npy'))
+age_labels = list(np.load(project_root + 'data/ages.npy')) # patient ages
+images = list(np.load(project_root + 'data/final_images.npy')) # patient images
+patient_IDs = list(np.load(project_root + 'data/corrected_NLST.npy')) # patient IDs
+age_class = list(np.load(project_root + 'data/age_class.npy')) # patient age classes
 
 for j,patient in enumerate(images):
     # Zero center
@@ -151,18 +134,11 @@ for j,patient in enumerate(images):
     std_intensity = np.std(zeroed)
     images[j] = zeroed / std_intensity
 
+# split data into training and validation/test sets
 indices = np.arange(len(images))
 x_train,x_valtest,y_train_label,y_valtest_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.3, stratify =age_class, random_state = 42)
 
-#x_train_pre,x_val,y_train_label_pre,y_val_label,idx1,idx2 = train_test_split(images,age_labels,indices, test_size = 0.2, random_state = 42)
-
-#indices2 = np.arange(len(x_train_pre))
-#x_train,x_test,y_train_label,y_test_label,idx3,idx4 = train_test_split(x_train_pre,y_train_label_pre,indices2,test_size = 0.25, random_state = 42)
-#x_train = np.asarray(x_train)
-#x_test = np.asarray(x_test)
-#y_train_label = np.asarray(y_train_label)
-#y_test_label = np.asarray(y_test_label)
-
+# pulls age and ID of patients in test and train set
 #test_ID = []
 #val_ID = []
 #train_age_new = []
@@ -198,38 +174,19 @@ x_augmented = x_train
 y_augmented = y_train_label
 x_val_augmented = x_valtest
 y_val_augmented = y_valtest_label
+
 def vol_flip():
-    return Compose([Flip(p=1)],p=1)
+    return Compose([Flip(p=1)],p=1) # flips image across vertical
 def vol_rotate():
-    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=1)],p=1)
+    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=1)],p=1) # rotates image
 def vol_blur():
-    return Compose([GlassBlur(sigma=0.2,max_delta=2,p=1)],p=1)
+    return Compose([GlassBlur(sigma=0.2,max_delta=2,p=1)],p=1) # blurs image
 def vol_noise():
-    return Compose([GaussianNoise(p=1)],p=1)
+    return Compose([GaussianNoise(p=1)],p=1) # introduces Gaussian noise to image
 def vol_bright():
-    return Compose([RandomBrightnessContrast(p=1)],p=1)
-def combo1():
-    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=0.75),
-                    GaussianNoise(p=0.25),
-                    GlassBlur(sigma=0.2,max_delta=2,p=0.25),
-                    Flip(p=0.2)],p=1)
-def combo2():
-    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=0.75),
-                    GaussianNoise(p=0.25),
-                    GlassBlur(sigma=0.2,max_delta=2,p=0.25),
-                    Flip(p=0.2)],p=1)
-def combo3():
-    return Compose([Rotate(x_limit=(-40, 40), y_limit=(0, 0), z_limit=(0, 0), p=0.75),
-                    GaussianNoise(p=0.25),
-                    GlassBlur(sigma=0.2,max_delta=2,p=0.25),
-                    Flip(p=0.2)],p=1)
+    return Compose([RandomBrightnessContrast(p=1)],p=1) # changes brightness/contrast of image
 
-#aug = vol_gamma()
-#img = x_train[0]
-#data = {'image':img}
-#aug_data = aug(**data)
-#img = aug_data['image']
-
+# applying augmentations
 for i in range(len(x_train)):
 
     flip = vol_flip()
@@ -237,20 +194,16 @@ for i in range(len(x_train)):
     blur = vol_blur()
     gauss = vol_noise()
     bright = vol_bright()
-    #combo_1 = combo1()
-    #combo_2 = combo2()
-    #combo_3 = combo3()
 
+    # setting training as data set
     data = {'image':x_train[i]}
 
+    # applying each augment to data
     aug_flip = flip(**data)
     aug_rotate = rotate(**data)
     aug_blur = blur(**data)
     aug_gauss = gauss(**data)
     aug_bright = bright(**data)
-    #aug_combo1 = combo_1(**data)
-    #aug_combo2 = combo_2(**data)
-    #aug_combo3 = combo_3(**data)
 
     image_flip = aug_flip['image']
     image_rotate = aug_rotate['image']
@@ -258,35 +211,25 @@ for i in range(len(x_train)):
     image_blur = aug_blur['image']
     image_gauss = aug_gauss['image']
     image_bright = aug_bright['image']
-    #image_combo1 = aug_combo1['image']
-    #image_combo1 = np.reshape(image_combo1,(final_img_length,final_img_length,final_img_slice))
-    #image_combo2 = aug_combo1['image']
-    #image_combo2 = np.reshape(image_combo2, (final_img_length, final_img_length, final_img_slice))
-    #image_combo3 = aug_combo1['image']
-    #image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
+    # adding augmented images to a new list with original training images
     x_augmented.append(image_flip)
     x_augmented.append(image_rotate)
     x_augmented.append(image_blur)
     x_augmented.append(image_gauss)
     x_augmented.append(image_bright)
-    #x_augmented.append(image_combo1)
-    #x_augmented.append(image_combo2)
-    #x_augmented.append(image_combo3)
 
+    # adding ages to a new list with original training ages
     y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
     y_augmented.append(y_train_label[i])
-    #y_augmented.append(y_train_label[i])
-    #y_augmented.append(y_train_label[i])
-    #y_augmented.append(y_train_label[i])
 
 x_augmented = np.asarray(x_augmented)
 y_augmented = np.asarray(y_augmented)
-#y_train = tf.keras.utils.to_categorical(y_augmented,num_classes=num_class)
 
+# performing the same augmentation as above for test set
 for i in range(len(x_valtest)):
 
     flip = vol_flip()
@@ -294,9 +237,6 @@ for i in range(len(x_valtest)):
     blur = vol_blur()
     gauss = vol_noise()
     bright = vol_bright()
-    #combo_1 = combo1()
-    #combo_2 = combo2()
-    #combo_3 = combo3()
 
     data = {'image':x_valtest[i]}
 
@@ -305,9 +245,6 @@ for i in range(len(x_valtest)):
     aug_blur = blur(**data)
     aug_gauss = gauss(**data)
     aug_bright = bright(**data)
-    #aug_combo1 = combo_1(**data)
-    #aug_combo2 = combo_2(**data)
-    #aug_combo3 = combo_3(**data)
 
     image_flip = aug_flip['image']
     image_rotate = aug_rotate['image']
@@ -315,41 +252,23 @@ for i in range(len(x_valtest)):
     image_blur = aug_blur['image']
     image_gauss = aug_gauss['image']
     image_bright = aug_bright['image']
-    #image_combo1 = aug_combo1['image']
-    #image_combo1 = np.reshape(image_combo1, (final_img_length, final_img_length, final_img_slice))
-    #image_combo2 = aug_combo1['image']
-    #image_combo2 = np.reshape(image_combo2, (final_img_length, final_img_length, final_img_slice))
-    #image_combo3 = aug_combo1['image']
-    #image_combo3 = np.reshape(image_combo3, (final_img_length, final_img_length, final_img_slice))
 
     x_val_augmented.append(image_flip)
     x_val_augmented.append(image_rotate)
     x_val_augmented.append(image_blur)
     x_val_augmented.append(image_gauss)
     x_val_augmented.append(image_bright)
-    #x_val_augmented.append(image_combo1)
-    #x_val_augmented.append(image_combo2)
-    #x_val_augmented.append(image_combo3)
 
     y_val_augmented.append(y_valtest_label[i])
     y_val_augmented.append(y_valtest_label[i])
     y_val_augmented.append(y_valtest_label[i])
     y_val_augmented.append(y_valtest_label[i])
     y_val_augmented.append(y_valtest_label[i])
-    #y_val_augmented.append(y_val_label[i])
-    #y_val_augmented.append(y_val_label[i])
-    #y_val_augmented.append(y_val_label[i])
 
 x_val_augmented = np.asarray(x_val_augmented)
 y_val_augmented = np.asarray(y_val_augmented)
 
-#y_train = tf.keras.utils.to_categorical(y_augmented,num_classes=num_class)
-#y_val = tf.keras.utils.to_categorical(y_val_augmented,num_classes=num_class)
-#y_test = tf.keras.utils.to_categorical(y_test_label,num_classes=num_class)
-
-
-#plt.imshow(x_augmented[74][:,:,60],cmap='gray')
-
+# Cole paper CNN for reference
 # repeated 5 blocks of --
 # 3x3x3 layer, stride 1
 # relu
@@ -364,49 +283,27 @@ x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides
 # find filter integer
 x = tf.keras.layers.BatchNormalization(name='bn1')(x)
 x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool1")(x)
-#x = tf.keras.layers.Dropout(0.1,name='dropout1')(x)
-#x = tf.keras.layers.Conv3D(16, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv2")(x)
-# find filter integer
-#x = tf.keras.layers.BatchNormalization(name='bn2')(x)
-#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool2")(x)
-#x = tf.keras.layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),name="conv3")(x)
-# find filter integer
-#x = tf.keras.layers.BatchNormalization(name='bn3')(x)
-#x = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), strides=(2, 2, 2),name="maxpool3")(x)
-
-#CNN Block 2-5
-#for j in range(1): #change to 3 blocks
-    #x = tf.keras.layers.Conv3D(32, kernel_size=(3,3,3), activation ='relu', strides=(1, 1, 1), name="conv"+str(3+2*j))(x)
-    # find filter integer
-    #x = tf.keras.layers.BatchNormalization(name='bn' + str(3+2*j))(x)
-    #x = tf.keras.layers.Conv3D(32, kernel_size=(3,3,3), activation ='relu',strides=(1, 1, 1), name="conv"+str(4+2*j))(x)
-    # find filter integer
-    #x = tf.keras.layers.BatchNormalization(name='bn'+str(4+2*j))(x)
-    #x = tf.keras.layers.MaxPool3D(pool_size=(2,2,2), strides=(2, 2, 2),name='maxpool'+str(1+2+j))(x)
 
 #CNN output
 x1 = tf.keras.layers.Flatten(name='output')(x)
 x2 = tf.keras.layers.Dropout(0.5,name='dropoutdense')(x1)
 # fraction of the input units to drop
 x2 = tf.keras.layers.Dense(16, activation = 'relu', kernel_regularizer="l1_l2")(x2)
-#x2 = tf.keras.layers.Dropout(0.1,name='dropoutdense2')(x2)
 x2 = tf.keras.layers.Dense(8, activation = 'relu', kernel_regularizer="l1_l2")(x2)
 # fraction of the input units to drop
 output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l1_l2")(x2)
-#output = tf.keras.layers.Dense(1, activation="linear",kernel_regularizer="l2")(x2)
-#positive integer, dimensionality of the output space
+# positive integer, dimensionality of the output space
 
 #Model
 model = tf.keras.models.Model(inputs=[input], outputs=[output])
 model.summary()
-#pic=tf.keras.utils.plot_model(model, to_file=fig_print, show_shapes=True)
-#pic = plot_model(model, to_file='model.png', show_shapes=True, show_layer_names=False, rankdir='TB', expand_nested=False, dpi=96)
 
 model.compile(loss=loss,
               optimizer=optimizer,
               metrics = met
               )
 
+# training model
 history = model.fit(x_augmented, y_augmented,
           validation_data=(x_val_augmented, y_val_augmented),
           batch_size=batch_size,
@@ -414,9 +311,10 @@ history = model.fit(x_augmented, y_augmented,
           callbacks=callbacks_model
           )
 
-
+# predicting on test set using model
 y_predicted = model.predict(x_test_plug, batch_size=batch_size)
 
+# putting expected ages into bins
 age_class_ex = []
 for i in range(len(y_expected)):
     if y_expected[i] <= 60:
@@ -428,7 +326,7 @@ for i in range(len(y_expected)):
 
     age_class_ex.append(age_bin)
 
-
+# putting predicted ages into bins
 age_class_pred = []
 for i in range(len(y_predicted)):
     if y_predicted[i] <= 60:
@@ -440,93 +338,40 @@ for i in range(len(y_predicted)):
 
     age_class_pred.append(age_bin)
 
-results = model.evaluate(x_test_plug,y_expected)
-model_metrics = model.metrics_names
-#r2 = r2_score(y_expected, y_predicted)
-r2 = r2_score(age_class_ex, age_class_pred)
-model_metrics.append('r2')
-results.append(r2)
-
-cm = confusion_matrix(age_class_ex, age_class_pred)
-age_df = pd.DataFrame(cm,
-                     index = ['60','61-70','71+'],
-                     columns = ['60','61-70','71+'])
-
-corr, _ = pearsonr(age_class_ex, age_class_pred)
-model_metrics.append('r')
-results.append(corr)
-
-dict = {'Metric': model_metrics, 'Value': results}
-df = pd.DataFrame(dict)
-df.to_csv(project_root + '/results/test_evaluation_' + detail + '.csv',index=False)
-
+# saving list of predicted ages
 np.savetxt(project_root + 'results/age_predictions_reg_' + detail +'.csv', y_predicted, delimiter=",",fmt='%i')
 
+# saving list of predicted age bins and expected age bins
 np.savetxt(project_root + 'results/age_expected_bin_' + detail +'.csv', age_class_ex, delimiter=",",fmt='%i')
 np.savetxt(project_root + 'results/age_predictions_bin_' + detail +'.csv', age_class_pred, delimiter=",",fmt='%i')
 
-# summarize history for accuracy
-#plt.plot(history.history['accuracy'])
-#plt.plot(history.history['val_accuracy'])
-#plt.title('model accuracy')
-#plt.ylabel('accuracy')
-#plt.xlabel('epoch')
-#plt.legend(['Train', 'Validation'], loc='upper left')
-#plt.show()
-#plt.savefig(fig_accuracy)
-
+# saving model plot of loss
 plt.figure(figsize=(10,8))
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='val')
 plt.title('MAE Loss '+ detail)
 plt.xlabel('Epoch')
 plt.ylabel('MAE Loss')
-#plt.ylim([0, 50])
 plt.legend()
 #plt.show()
 plt.savefig(fig_loss)
 
+# saving model MAE
 plt.figure(figsize=(10,8))
 plt.plot(history.history['mae'], label='train')
 plt.plot(history.history['val_mae'], label='val')
 plt.title('MAE '+ detail)
 plt.xlabel('Epoch')
 plt.ylabel('MAE')
-#plt.ylim([0, 50])
 plt.legend()
 #plt.show()
 plt.savefig(fig_mae)
 
-#corr_str = round(corr[0], 2)
-#r2_str = round(r2, 2)
-
-#compare predicted and true age
+#compare predicted and true age by bins
 plt.figure(figsize=(10,8))
 plt.scatter(age_class_ex,age_class_pred)
 plt.plot([min(age_class_ex), max(age_class_ex)], [min(age_class_ex), max(age_class_ex)], 'k--', lw=4)
-#plt.annotate('Pearson correlation coefficient = ' + corr_str,xy=(0.1,0.9), xycoords='axes fraction')
-#plt.annotate(f'R-squared = ' + r2_str, xy=(0.1,0.8), xycoords='axes fraction')
 plt.title('comparison '+ detail)
 plt.ylabel('predicted age')
 plt.xlabel('true age')
 plt.savefig(fig_prediction)
-
-#Plotting the confusion matrix
-plt.figure(figsize=(10,8))
-sns.heatmap(age_df, annot=True)
-plt.title('Confusion Matrix')
-plt.ylabel('Actual Values')
-plt.xlabel('Predicted Values')
-plt.savefig(fig_confusion)
-
-#r = np.corrcoef(x_test, y_expected)[0, 1]
-
-#loss, mae = model.evaluate(x_test, y_expected)
-#evaluation = np.array([loss,mae,r2, r])
-
-#np.savetxt(project_root+'/results/evaluation.csv',evaluation)
-#Feature extraction
-#layer_name='x6'
-#layer_extractor = tf.keras.Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
-#feature_extraction=layer_extractor.predict(x_test)
-#print(feature_extraction.shape)
